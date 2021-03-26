@@ -9,6 +9,7 @@ settings:
   file: ClipVolumeRange3Plane.yaml
   exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
     - web   # To be re-enabled during implementation of TR-PB-245136
+    - android
 calls:
 #Load the small utility area model
 - command: GVCLoadModel
