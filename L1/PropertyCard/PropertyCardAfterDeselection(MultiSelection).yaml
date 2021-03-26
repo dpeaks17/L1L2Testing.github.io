@@ -1,0 +1,62 @@
+# Author: Abhinav Awasthi
+# Created on: 19-Mar-2020
+# L1 Test for testing property card after multiple object selection/deselection
+settings:
+  name: PropertyCardAfterDeselection(MultiSelection)
+  description: "Load a model, select multiple objects. Deselect only one object and validate visibility of property card"
+  classname: L1
+  suite: PropertyCard
+  file: PropertyCardAfterDeselection(MultiSelection).yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+  # Select another object
+  - command: MCDSelect
+    input:
+      - 35
+      - true
+      - mcdrange:
+          - 2980.16626
+          - 2398.155
+          - 70.165
+          - 2995.2395
+          - 2409.49878
+          - 70.3131256
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: true #true indicates property card is visible after selection
+  # Remove only one of the selected object from selection
+  - command: MCDSelect
+    input:
+      - 59
+      - true
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: true #as one of the object is still selected, property card is visible

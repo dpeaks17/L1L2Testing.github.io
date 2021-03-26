@@ -1,0 +1,47 @@
+settings:
+  name: AccentManagerSetBucketVisible
+  description: "Tests the setBucketVisible call on the accent manager."
+  classname: L1
+  suite: Materials
+  file: AccentManagerSetBucketVisible.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "RedMaterial"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: .75
+- command: MCDAccentInitialize
+  input:
+    - materials: ["RedMaterial"]
+- command: MCDAddToBucket
+  input:
+    - ids: [34,35,36,37,38]
+    - material: "RedMaterial"
+- command: MCDSetBucketVisible
+  input:
+    - "RedMaterial"
+    - false # set the RedMaterial bucket to hiddden
+  validation:
+    - command: GetBucketVisible
+      input: "RedMaterial"
+      expected: {"BucketExists": true,"BucketIsVisible": false}
+# check that it is possible to set the bucket to visible again
+- command: MCDSetBucketVisible
+  input:
+    - "RedMaterial"
+    - true # set the RedMaterial bucket to visible
+  validation:
+    - command: GetBucketVisible
+      input: "RedMaterial"
+      expected: {"BucketExists": true,"BucketIsVisible": true}

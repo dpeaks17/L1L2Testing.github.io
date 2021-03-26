@@ -1,0 +1,54 @@
+# Author: Dasu Yamala
+# Created on: 16-Jun-2020
+# L1 Test to validate the state of setHome and resetHome in isolate and deisolate mode.
+settings:
+  name: SetAndResetHomeInIsolate
+  description: "Select the object and Isolate and then check the state of setHome and resetHome and deisolate the object and again check the state of setHome and resetHome"
+  classname: L1
+  suite: Isolate
+  file: SetAndResetHomeInIsolate.yaml
+  exclusions:
+   - desktop
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+    - 59
+    - true
+    - mcdrange:
+      - 2984.682373046875
+      - 2400.51904296875
+      - 70.21309661865234
+      - 2990.031005859375
+      - 2404.73974609375
+      - 73.31312561035156     
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    # Validate the state of sethome and resethome in isolate mode.
+    validation:
+      - command: GetSetHomeLockedState
+        expected: true
+      - command: GetReSetHomeLockedState
+        expected: true
+  # Deactivate Isolate
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    # Validate the state of sethome and resethome in deisolate mode.
+    validation:
+      - command: GetSetHomeLockedState
+        expected: false
+      - command: GetReSetHomeLockedState
+        expected: false

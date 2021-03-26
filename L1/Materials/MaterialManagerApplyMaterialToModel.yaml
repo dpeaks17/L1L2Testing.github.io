@@ -1,0 +1,27 @@
+settings:
+  name: MaterialManagerApplyMaterialToModel
+  description: "Tests out applying a defined material to an entire model."
+  classname: L1
+  suite: Materials
+  file: MaterialManagerApplyMaterialToModel.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "MaterialName"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: .75
+- command: MCDApplyMaterialToModel
+  input:
+    - name: "MaterialName"
+# TODO: validate

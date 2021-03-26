@@ -1,0 +1,50 @@
+# Author: Supreethi Gande
+# Created on: 23-Jan-2020
+# L1 Test to Isolate Single Object
+settings:
+  name: ActivateIsolate(SingleObject)
+  description: "Select Single Object and Isolate"
+  classname: L1
+  suite: Isolate
+  file: ActivateIsolate(SingleObject).yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    validation:
+      - command: GetSelection
+        expected: [59]
+      - command: GetIsolateEnabledStatus
+        expected: true
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    validation:
+      - command: GetSelection
+        expected: []
+      - command: GetHiddenObjects
+        expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[59]}}
+  # Stop/Deactivate Isolate before going to next testcase
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: true

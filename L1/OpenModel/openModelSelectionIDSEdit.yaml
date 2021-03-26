@@ -1,0 +1,35 @@
+# Author: Andy Sutton
+# Revised: 08/18/2020
+# L1 test for open model with selections
+settings: 
+  name: openModeSelectionsIDSEdit
+  description: "Tests opening 3d using selections with Names. Modified version of original; this version calls a bad moniker."
+  classname: L1
+  suite: OpenModel`
+  file: openModelSelectionIDSEdit.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - ios
+    - android
+    - web   # To be re-enabled during implementation of Id map changes in gvc-react.
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+      - configuration:
+          Selections:
+            - select:
+                id: 55
+            - select:
+                id: 42
+            #Bad Moniker should be ignored
+            - select:
+                name: " @a=0028!!240024##2973113123448884574258"
+# Test
+  validation:
+    - command: GetCameraPosition  
+      expected: {"CameraPosition":{"center":{"x":2987.82,"y":2406.14,"z":67.76},"clip-far":200.00,"clip-near":0.1,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+      precision: 2

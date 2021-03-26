@@ -1,0 +1,46 @@
+# Author: Mark Goodrich
+# Description: Snapshot test on a parametic model with outline enabled
+# Last Revision: 3/9/2020
+settings:
+  name: SnapshotOutline
+  description: "Snapshot test with outline" 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotOutline.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: mcdenableeffects
+  input:
+     - effects:
+        - outline
+
+- command: MCDSelect
+  input:
+    - 59
+    - false
+    - mcdrange:
+      - 2984.682373046875
+      - 2400.51904296875
+      - 70.21309661865234
+      - 2990.031005859375
+      - 2404.73974609375
+      - 73.31312561035156
+- command: MCDFit
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: getRenderEffects
+      input:
+      - "Outline"
+      expected: {"color":{"w":1,"x":0,"y":0,"z":0},"enable": true,"threshold": 0.95}
+      precision: 2
+    - command: GetSnapshotTaken
+      expected: true

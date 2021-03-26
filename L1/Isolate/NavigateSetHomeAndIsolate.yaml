@@ -1,0 +1,72 @@
+# Author: Supreethi Gande
+# Created on: 23-Jan-2020
+# L1 Test to navigate model, set Home, isolate and deisolate an object and move to home position
+settings:
+  name: NavigateSetHomeAndIsolate
+  description: "Navigating the model and Testing Isolate for single object"
+  classname: L1
+  suite: Isolate
+  file: NavigateSetHomeAndIsolate.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Move the model
+  - command: MCDMove
+    input:
+      - 20
+      - 20
+      - -20
+      - 20
+      - 20
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2996.0101064189075,"y":2406.300809212524,"z":68.18445494654023},"clip-far":200,"clip-near":23.802630877671128,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2
+  # Set the current position as home position
+  - command: MCDSetHome
+  # Again move the model
+  - command: MCDMove
+    input:
+      - 10
+      - 10
+      - 10
+      - 10
+      - 10
+  # Select an object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    validation:
+      - command: GetSelection
+        expected: [59]
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+  # Deactivate isolate
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+  # Move back to home position
+  - command: MCDGoHome
+    # Validate whether model has moved to newly set home position
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2996.01,"y":2406.31,"z":68.18},"clip-far":200,"clip-near":23.802630877671128,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2

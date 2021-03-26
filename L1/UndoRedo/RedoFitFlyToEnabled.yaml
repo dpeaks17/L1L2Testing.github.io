@@ -1,0 +1,72 @@
+# Tests Redo of an Undo of Fit Command with FlyTo Enabled
+settings:
+  name: RedoFitFlyToEnabled
+  description: "Tests Redo of an Undo of Fit Command with FlyTo Enabled"
+  classname: L1
+  suite: UndoRedoTests
+  file: RedoFitFlyToEnabled.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled while making FlyTo in gvc-react same as in gvc-wpf(CR-PB-245161).
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDToggleFlyTo
+  input:
+  - true
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+- command: MCDFit
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2987.36,"y":2402.63,"z":71.76},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+    tolerance: 0.5
+- command: MCDSelect
+  input:
+  - 36
+  - false
+  - mcdrange:
+    - 2980.10009765625
+    - 2398.090087890625
+    - 74.66500091552734
+    - 2995.292236328125
+    - 2409.550048828125
+    - 74.7031021118164
+- command: MCDFit
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2987.70,"y":2403.82,"z":74.68},"clip-far":200.00,"clip-near":6.79,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+    tolerance: 0.5
+- command: MCDUndo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2987.36,"y":2402.63,"z":71.76},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+    tolerance: 0.5
+# Test
+- command: MCDRedo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2987.70,"y":2403.82,"z":74.68},"clip-far":200.00,"clip-near":6.79,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+    tolerance: 0.5
+#Turn FlyTo Back off
+- command: MCDToggleFlyTo
+  input:
+  - false

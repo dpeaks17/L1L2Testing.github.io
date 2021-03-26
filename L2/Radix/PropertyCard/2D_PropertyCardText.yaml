@@ -1,0 +1,40 @@
+# Author: Bryan Pugh
+# Revised: 6/26/2020
+# Test for testing property card (Hot Spotting) after selection of text in 2D Drawing
+settings:
+  name: 2D_PropertyCardText
+  description: Verifies text property card displays in a 2D model. 
+  classname: PropertyCardTests
+  suite: Property Card
+  file: 2D_PropertyCardText.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - desktop
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the central vessel's text 1011-O-5524-50-6CB2B01-N
+- command: MCDSelect
+  input:
+  - 4321
+  - false
+  - mcdrange:
+    - 479.875244
+    - 1057.24475
+    - 0
+    - 678.2359
+    - 1130.36279
+    - 0
+  # Validate property card visibility
+  validation:
+      - command: GetPropertyCardStatus
+        expected: true #True indicates property card is visible after selection

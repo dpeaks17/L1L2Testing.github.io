@@ -1,0 +1,46 @@
+# Author: Ajay Nagar
+# Created on: 29-July-2020
+# L1 Test to validate that the navigator compass is in sync with camera
+settings:
+    name: SyncNavigatorCompassWithCamera
+    description: Validate that the navigator compass is in sync with camera
+    classname: L1
+    suite: Navigator
+    file: SyncNavigatorCompassWithCamera.yaml
+    exclusions:
+      - ios
+      - android
+      - desktop
+calls:
+# Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  - command: ToggleNavigator
+    input: 
+      - true
+  - command: MCDNavigatorCompass
+    input:
+      - 180
+  - command: ToggleNavigator
+    input: 
+      - false  
+  - command: MCDRotate
+    input:
+      - 128
+      - -2
+      - true
+  - command: ToggleNavigator
+    input: 
+      - true
+    validation:
+      - command: GetNavigatorBearing
+        expected: 111.30
+        precision: 2
+  - command: ToggleNavigator
+    input: 
+      - false

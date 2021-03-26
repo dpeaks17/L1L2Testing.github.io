@@ -1,0 +1,56 @@
+# Author: Abhinav Awasthi
+# Created on: 23-Jan-2020
+# L1 test to navigate model, select and fit an object and Isolate it
+settings:
+  name: NavigateModelFitAndIsolate
+  description: "Navigate the model, select and fit an object and Isolate it"
+  classname: L1
+  suite: Isolate
+  file: NavigateModelFitAndIsolate.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Move the model
+  - command: MCDMove
+    input:
+      - 20
+      - 20
+      - -20
+      - 20
+      - 20
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+  # Fit selected object
+  - command: MCDFit
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.36,"y":2402.63,"z":71.76},"clip-far":200,"clip-near":0.1,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2
+      - command: GetHiddenObjects
+        expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[59]}}
+  # Stop/Deactivate Isolate before going to next testcase
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: true

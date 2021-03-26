@@ -1,0 +1,56 @@
+# Author: Supreethi Gande
+# Created on: 23-Jan-2020
+# L1 test to Isolate an object, move it and exit Isolate
+settings:
+  name: IsolateMoveAndExit
+  description: "Isolate an object, move it and exit isolate"
+  classname: L1
+  suite: Isolate
+  file: IsolateMoveAndExit.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2990.759765625,"y":2403.8203125,"z":70.9315414428711},"clip-far":200,"clip-near":15.008632490395845,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156    
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+  # Move isolated object
+  - command: MCDMove
+    input:
+      - 20
+      - 20
+      - -20
+      - 20
+      - 20
+  # Exit Isolate
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    validation:
+      - command: GetHomePosition
+        expected: {"CameraHomePosition":{"center":{"x":2990.759765625,"y":2403.8203125,"z":70.931541442871094},"clip-far":200.0,"clip-near":15.008632490395845,"perspective":56.0,"up":{"x":-0.36829099380970703,"y":0.39533318303057641,"z":0.8414709848078965}}}
+        precision: 2

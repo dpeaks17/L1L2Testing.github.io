@@ -1,0 +1,35 @@
+# Author: Curt Werline
+# Revised: 2/10/2020 by Andy Sutton
+# L1 test for common view (BackRight) without a target
+settings:
+  name: CommonViewBackRight
+  description: "Sets and gets the BackRight common view without a target."
+  classname: L1
+  suite: CommonViews
+  file: CommonViewBackRight.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Start common views command
+- command: MCDCommonViewsStart
+# Set the BackRight common view (no target)
+- command: SetCommonView
+  input:
+    view: BackRight
+    target: false
+# Validate that the common view is set to BackRight
+  validation:
+    - command: GetCommonView
+      expected: BackRight
+# Stop/Deactivate common views before going to next test case
+- command: MCDCommonViewsStop

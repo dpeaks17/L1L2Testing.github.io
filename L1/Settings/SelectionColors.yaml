@@ -1,0 +1,41 @@
+# Author: Curt Werline
+# Revised: 2/25/2020
+# L1 test for selection colors
+settings:
+  name: SelectionColors
+  description: "Sets and gets both of the selection colors."
+  classname: L1
+  suite: SettingsTests
+  file: SelectionColors.yaml
+  exclusions:
+    - ios
+    - android
+    - web
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Set both of the selection colors
+- command: SetSelectionColors
+  input:
+    color:
+      a:
+        red: 1.0
+        green: 0.25
+        blue: 0.5
+        alpha: 1.0
+      b:
+        red: 0.0
+        green: 0.5
+        blue: 0.95
+        alpha: 0.0
+# Validate that the selection colors are correct.
+  validation:
+    - command: GetSelectionColors
+      expected: "[1,0.25,0.5,1][0,0.5,0.95,0]"
+      precision: 2

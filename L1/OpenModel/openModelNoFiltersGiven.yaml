@@ -1,0 +1,18 @@
+# loads a model
+settings:
+  name: OpenModelNoFiltersGiven
+  description: "Tests opening of a model with no filters given for the command input."
+  classname: L1
+  suite: Models
+  file: openModelNoFiltersGiven.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+  validation:
+    - command: getModels
+      expected: {"models":[{}]} # require filters here or send nothing back

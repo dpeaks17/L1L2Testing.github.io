@@ -1,0 +1,34 @@
+# Tests Redo of an Undo Command with no setup
+settings:
+  name: RedoNoSetup
+  description: "Tests Redo of an Undo after only opening a model"
+  classname: L1
+  suite: UndoRedoTests
+  file: RedoNoSetup.yaml
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3035.82,"y":2387.79,"z":77.50},"clip-far":200.00,"clip-near":45.31,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+- command: MCDToggleFlyTo
+  input:
+  - false
+- command: MCDUndo
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3035.82,"y":2387.79,"z":77.50},"clip-far":200.00,"clip-near":45.31,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+# Test
+- command: MCDRedo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2

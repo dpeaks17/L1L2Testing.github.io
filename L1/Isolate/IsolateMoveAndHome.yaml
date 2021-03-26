@@ -1,0 +1,71 @@
+# Author: Supreethi Gande
+# Created on: 23-Jan-2020
+# L1 Test for isolation of multiple objects and testing isolate home positiion
+settings:
+  name: IsolateMoveAndHome
+  description: "Isolate multiple objects, move and come back to isolate home positiion"
+  classname: L1
+  suite: Isolate
+  file: IsolateMoveAndHome.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+  # Select another object
+  - command: MCDSelect
+    input:
+      - 35
+      - true
+      - mcdrange:
+          - 2980.16626
+          - 2398.155
+          - 70.165
+          - 2995.2395
+          - 2409.49878
+          - 70.3131256         
+  # Isolate selected objects
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.702880859375,"y":2403.826904296875,"z":71.739059448242188},"clip-far":200.0,"clip-near":5.9003272841918335,"perspective":56.0,"up":{"x":-0.36829099380970703,"y":0.39533318303057641,"z":0.8414709848078965}}}
+        precision: 2
+  # Move isolated objects
+  - command: MCDMove
+    input:
+      - 20
+      - 20
+      - -20
+      - 20
+      - 20    
+  # Go to home position
+  - command: MCDGoHome
+    # Validate home position
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.702880859375,"y":2403.826904296875,"z":71.739059448242188},"clip-far":200.0,"clip-near":5.9003272841918335,"perspective":56.0,"up":{"x":-0.36829099380970703,"y":0.39533318303057641,"z":0.8414709848078965}}}
+        precision: 2
+  # Stop/Deactivate Isolate before going to next testcase
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: true

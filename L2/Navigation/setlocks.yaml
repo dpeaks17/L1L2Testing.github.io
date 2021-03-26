@@ -1,0 +1,40 @@
+settings:
+  name: SetLocks
+  description: "Tests out the set locks api call."
+  classname: L2
+  suite: CameraTests
+  file: setlocks.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: mcdsetlocks
+  input:
+    - locks:
+        off:
+        - pitch
+        - yaw
+        - center
+        on:
+        - elevation
+  validation:
+    - command: getCameraState
+      input:
+        - isPitchAngleLocked
+      expected: false
+    - command: getCameraState
+      input:
+        - isYawAngleLocked
+      expected: false
+    - command: getCameraState
+      input:
+        - isCenterLocked
+      expected: false
+    - command: getCameraState
+      input:
+        - isElevationLocked
+      expected: true

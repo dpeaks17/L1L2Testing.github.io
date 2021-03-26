@@ -1,0 +1,48 @@
+# Tests Reset Home Command
+settings:
+  name: ResetHome
+  description: "Tests Reset Home Command"
+  classname: L1
+  suite: HomeTests
+  file: ResetHome.yaml
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDFit
+# Navigate somewhere
+- command: MCDMove
+  input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100
+# set home
+- command: MCDSetHome
+# Navigate somewhere else
+- command: MCDMove
+  input:
+    - -287
+    - -20
+    - 10
+    - 100
+    - 100
+# Test Reset Home command
+- command: MCDResetHome
+  validation:
+  - command: GetHomePosition
+    expected: {"CameraHomePosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2    
+# Test Home command
+- command: MCDGOHome
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2    
+   

@@ -1,0 +1,31 @@
+# NavigatorWalk test
+settings:
+  name: NavigatorWalk
+  description: NavigatorWalk test
+  classname: NavigatorWalk
+  suite: Navigator
+  file: NavigatorWalk.yaml
+  #exclusions:
+  #  - ios
+  #  - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Test
+- command: ToggleNavigator
+  input: 
+    - true
+- command: MCDNavigatorWalk
+  validation: #Verify that camera state is locked
+    - command: getCameraState
+      input: 
+        - isElevationLocked
+      expected: true
+- command: ToggleNavigator
+  input: 
+    - false

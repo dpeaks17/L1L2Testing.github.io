@@ -1,0 +1,39 @@
+settings:
+  name: AmbientOcclusionSetRenderEffectsVariant
+  description: "Tests out the enabling of render effects using AntiAlias."
+  classname: L1
+  suite: SettingsTests
+  file: AmbientOcclusion.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: mcdenableeffects
+  input:
+     - effects:
+        - AmbientOcclusion
+
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+
+- command: MCDFit
+
+  validation:
+  - command: getrendereffects
+    input:
+      - "AmbientOcclusion"
+    expected: {"enable": true,"size": 0.5}

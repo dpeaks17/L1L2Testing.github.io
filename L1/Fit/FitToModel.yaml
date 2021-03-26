@@ -1,0 +1,29 @@
+# FitToModel test
+settings:
+  name: FitToModel
+  description: "Fit To Model test"
+  classname: L1
+  suite: FitTests
+  file: FitToModel.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - RefiningTestModel
+      - https://argo.hexagonppm.com/graphicsamples/refining/
+      - parametrics
+      - file
+# Move camera so we can fit after
+- command: MCDMove
+  input:
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+# Test
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {CameraPosition : {center : {x : 3035.82,y : 2387.79,z : 77.5},clip-far : 200,clip-near : 45.31,perspective : 56,up : {x : -0.37,y : 0.4,z : 0.84}}}
+      precision: 2

@@ -1,0 +1,61 @@
+# Author: Justin Ikerman
+# Revised: 4/13/2020
+# Tests load and rendering of multi models in 2D Drawing
+settings:
+  name: 2D_ModelSwitch
+  description: Verifies you can load a 2D Model, switch to 3D, then back to 2D, and the 2D model loads. 
+  classname: Render
+  suite: L2_Radix
+  file: 2D_ModelSwitch.yaml
+calls:
+# Open a 2D Model
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Open a 3D Model
+- command: GVCLoadModel
+  input:
+    - model:
+      - Matterport
+      - https://argo.hexagonppm.com/graphicsamples/matterport/output/
+      - HSPC
+      - file
+# Open the 2D Model again
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+  delay_after: 5
+# Select the central vessel to verify it renders
+- command: MCDSelect
+  input:
+  - 3230
+  - false
+  - mcdrange:
+    - 415.570862
+    - 481.44928
+    - 0
+    - 728.7554
+    - 1551.54077
+    - 0
+  validation:
+    - command: getSelection
+      expected: [3230]  # Expected ID
+      precision: 1

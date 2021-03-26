@@ -1,0 +1,65 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Select and Move Different Clipping Plane (6 planes)
+settings:
+  name: SelectAndMoveSingleClipPlane (6 planes)
+  description: "Selects one plane at a time and moves it"
+  classname: L1
+  suite: Clipping
+  file: SelectAndMoveSingleClipPlane.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+          - configuration:
+              Selections:
+                - select:
+                    id: 282
+                    mcdrange:
+                      - 3045.99121
+                      - 2375.418
+                      - 77.77323
+                      - 3051.59131
+                      - 2377.618
+                      - 80.37323     
+  # Start Clip                               
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734    
+  # Select a clipping plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":5.720323085784912,"height":79.55778342516659,"latitude":2375.421168683853,"layerid":9,"longitude":3049.238914966144,"nx":-0.00024939572285205476,"ny":-0.9999999672845599,"nz":0.000056856419839427755,"target-name":"ClipPlanesInDynamicMeshLayer","x":3049.238914966144,"y":2375.421168683853,"z":79.55778342516659}],"x":892,"y":516}
+  # Move the selected plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 776
+      y: 706
+  # Select another clipping plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":5.6604413986206055,"height":80.12405927580599,"latitude":2375.8212732346283,"layerid":8,"longitude":3049.2396318825654,"nx":0.00001699410988469144,"ny":-0.6374669472591311,"nz":0.7704777030280138,"target-name":"Refining","x":3049.2396318825654,"y":2375.8212732346283,"z":80.12405927580599},{"distance":5.126911163330078,"height":80.37620587484642,"latitude":2375.4865356882756,"layerid":10,"longitude":3049.5698246873944,"nx":0.0012635517284972336,"ny":-0.0013566532074493795,"nz":0.9999982814630755,"target-name":"ClipPlanesInDynamicMeshLayer","x":3049.5698246873944,"y":2375.4865356882756,"z":80.37620587484642}],"x":936,"y":414}
+  # Move the currently selected plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 657
+      y: 300
+    validation:
+      - command: getClipVolumeRangeChanged
+        input:
+          tolerance: 0.01
+        expected: true
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

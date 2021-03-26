@@ -1,0 +1,46 @@
+# SelectMultiple test
+settings:
+  name: SelectMultiple
+  description: "Select Multiple test"
+  classname: L1
+  suite: SelectTests
+  file: SelectMultiple.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - RefiningTestModel
+      - https://argo.hexagonppm.com/graphicsamples/refining/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+  - 283
+  - true
+  - mcdrange:
+    - 3037.589111328125
+    - 2375.41796875
+    - 77.773231506347656
+    - 3043.189208984375
+    - 2377.617919921875
+    - 80.37322998046875
+  validation:
+    - command: getSelection
+      expected: [283]
+      precision: 2
+- command: MCDSelect
+  input:
+  - 276
+  - true
+  - mcdrange:
+    - 3024.62744140625
+    - 2374.48583984375
+    - 67.16107177734375
+    - 3028.62744140625
+    - 2378.48583984375
+    - 81.66107177734375
+  validation:
+    - command: getSelection
+      expected: [276, 283]
+      precision: 2
+# test

@@ -1,0 +1,56 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Select and Move Multiple Clipping Plane at once (6 planes)
+settings:
+  name: SelectAndMoveMultipleClipPlane (6 planes)
+  description: "Selects Multiple Clipping Planes at once and moves it"
+  classname: L1
+  suite: Clipping
+  file: SelectAndMoveMultipleClipPlane.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+          - configuration:
+              Selections:
+                - select:
+                    id: 282
+                    mcdrange:
+                      - 3045.99121
+                      - 2375.418
+                      - 77.77323
+                      - 3051.59131
+                      - 2377.618
+                      - 80.37323  
+  # Start Clip           
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734       
+  # Select 3 planes
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":6.006712436676025,"height":77.817166832079,"latitude":2375.420349333646,"layerid":10,"longitude":3051.5874582580655,"nx":-0.0005930822498219682,"ny":-0.9999995573394419,"nz":0.000730461747891271,"target-name":"ClipPlanesInDynamicMeshLayer","x":3051.5874582580655,"y":2375.420349333646,"z":77.817166832079}],"x":1183,"y":919}
+  # Move all the 3 selected planes
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 1186
+      y: 840
+    validation:
+      - command: GetClipVolumeRangeChanged
+        input:
+          tolerance: 0.01
+        expected: true
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

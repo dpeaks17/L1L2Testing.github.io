@@ -1,0 +1,78 @@
+# Author: Brandon Hightower
+# Description: Select a single object in 2D drawing
+# Last Revision: 8/13/2020
+settings:
+  name: 2D_SingleSelect
+  description: Verifies single objects are selected correctly in 2D Drawing
+  classname: Selection 
+  suite: Select 
+  file: 2D_SingleSelect.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDSelect
+  input:
+  - 3712 
+  - false
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [3712] 
+- command: MCDSelect
+  input:
+  - 3712 
+  - false
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [] # Selecting an object a second time deselects it    
+- command: MCDSelect
+  input:
+  - 2857 
+  - false
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [2857]
+- command: MCDSelect
+  input:
+  - 2388 
+  - false
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [2388] # previous selection is deselected upon selecting a new object

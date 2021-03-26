@@ -1,0 +1,53 @@
+# Tests Redo of an Undo of Home Command
+settings:
+  name: RedoHome
+  description: "Tests Redo of an Undo of Home Command"
+  classname: L1
+  suite: UndoRedoTests
+  file: RedoHome.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of Id map changes in gvc-react(TR-PB-245747).
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDToggleFlyTo
+  input:
+  - false
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+- command: MCDFit
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3039.96,"y":2411.00,"z":73.90},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+- command: MCDGoHome
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3035.82,"y":2387.79,"z":77.50},"clip-far":200.00,"clip-near":45.31,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+- command: MCDUndo
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3039.96,"y":2411.00,"z":73.90},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+# Test
+- command: MCDRedo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2

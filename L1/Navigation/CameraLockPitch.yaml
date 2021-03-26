@@ -1,0 +1,47 @@
+# Pitch Angle Lock with MCDRotate
+settings:
+  name: CameraLockPitch
+  description: "Tests the camera lock for Pitch with MCDRotate."
+  classname: L1
+  suite: Navigation
+  file: CameraLockPitch.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSetLocks
+  input:
+    - locks:
+        on: #enable locks
+        - pitch
+# Navigate somewhere else
+- command: MCDRotate #Rotate the view about the y axis
+  input:
+    - 0 # deltax
+    - -10 # deltay
+    - false # target
+  validation: #Verify that camera state is locked
+    - command: getCameraState
+      input: 
+        - isElevationLocked
+      expected: false
+    - command: getCameraState
+      input: 
+        - isPitchAngleLocked
+      expected: true
+    - command: getCameraState
+      input: 
+        - isYawAngleLocked
+      expected: false
+    - command: getCameraState
+      input: 
+        - isCenterLocked
+      expected: false     
+    #Verify that camera position is correct
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+      precision: 2 

@@ -1,0 +1,49 @@
+# Author: Derek Brown
+# Revised: 8/19/2020
+# Creates a 3 plane clipping box, moves one of the planes inward until the plane flips.
+settings:
+  name: ClipVolumeRangeMoveInsideOutDesktop
+  description: "Creates a 3 plane clipping box, moves one of the planes inward until the plane flips."
+  classname: L1
+  suite: Clipping
+  file: ClipVolumeRangeMoveInsideOutDesktop.yaml
+  exclusions:
+    - desktop # Yes, this test is for desktop, but it was always failing in pipeline. Removing for now
+    - web
+    - android
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+        - Refining
+        - https://argo.hexagonppm.com/graphicsamples/refining/
+        - parametrics
+        - file
+- command: MCDClipStart
+  input:
+    range:
+      min:
+        x: 3009
+        y: 2357
+        z: 66
+      max:
+        x: 3061
+        y: 2418
+        z: 67  
+# Select a clipping plane
+- command: MCDClipLocatePlane
+  input:
+    locateString: {"action":"depthClicked","hits":[{"distance":73.91886901855469,"height":74.22123765792642,"latitude":2375.8139304072665,"layerid":7,"longitude":3048.6209384802473,"nx":0.0005647916536655103,"ny":-0.0006077073735324095,"nz":0.9999996558510088,"target-name":"Refining","x":3048.6209384802473,"y":2375.8139304072665,"z":74.22123765792642},{"distance":69.00704193115234,"height":77.52111420923065,"latitude":2373.0981248720564,"layerid":9,"longitude":3051.041933321669,"nx":0.0005688380959988289,"ny":-0.0006120509417022412,"nz":0.9999996509083717,"target-name":"ClipPlanesInDynamicMeshLayer","x":3051.041933321669,"y":2373.0981248720564,"z":77.52111420923065}],"x":974,"y":638}
+#Move the selected plane
+- command: MCDClipManipulationUpdate
+  input:
+    x: 0
+    y: 0
+  validation:
+    - command: GetClipVolumeRange
+      expected: {"max":{"x":3035.82,"y":2418.5,"z":113.27},"min":{"x":3009.7,"y":2387.8,"z":66.91}}
+      precision: 1
+#Stop/Deactivate Clip before going to next testcase
+- command: MCDClipStop

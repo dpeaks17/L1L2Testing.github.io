@@ -1,0 +1,53 @@
+# Author: Satya Patnaik
+# Created: 03-Jan-2020
+# Select and Move 2 Clipping Plane (3 planes)
+settings:
+  name: TwoPlaneClipping (3 planes)
+  description: "Deletes 1 plane and selects remaining 2 at once and performs clipping"
+  classname: L1
+  suite: Clipping
+  file: TwoPlaneClipping.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734    
+  # Select 1 Clipping plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":68.73422241210938,"height":90.40734659503248,"latitude":2387.8413585978856,"layerid":10,"longitude":3056.6696020331374,"nx":-0.00020669483184390943,"ny":-0.9999999781043283,"nz":0.00003268928552884799,"target-name":"ClipPlanesInDynamicMeshLayer","x":3056.6696020331374,"y":2387.8413585978856,"z":90.40734659503248}],"x":1167,"y":442}
+  # Hide the selected plane
+  - command: MCDClipHidePlane
+    input:
+      planeId: [0]
+  # Select the remaining 2 planes
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":83.8592300415039,"height":69.48182558842217,"latitude":2362.0017092871913,"layerid":8,"longitude":3027.254568527502,"nx":0.9999979216696655,"ny":-0.001999341177215309,"nz":0.00039911302481874036,"target-name":"Refining","x":3027.254568527502,"y":2362.0017092871913,"z":69.48182558842217},{"distance":71.44188690185547,"height":77.53698645276616,"latitude":2357.9951822420708,"layerid":10,"longitude":3035.8133459331025,"nx":0.8546126654671065,"ny":-0.5102897538577194,"nz":0.09613302830471891,"target-name":"ClipPlanesInDynamicMeshLayer","x":3035.8133459331025,"y":2357.9951822420708,"z":77.53698645276616}],"x":99,"y":644}
+  # Move the 2 selected planes
+  - command: MCDClipManipulationupdate
+    input:
+      x: 100
+      y: 700
+    validation:
+      - command: GetClipVolumeRangeChanged
+        input:
+          tolerance: 0.01
+        expected: true
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop        

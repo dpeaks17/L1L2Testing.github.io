@@ -1,0 +1,65 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Resume Clipping (6 planes)
+settings:
+  name: ResumeClip (6 planes)
+  description: "Calls Resume after pause and checks whether clipping planes are showing or not"
+  classname: L1
+  suite: Clipping
+  file: ResumeClip.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+          - configuration:
+              Selections:
+                - select:
+                    id: 282
+                    mcdrange:
+                      - 3045.99121
+                      - 2375.418
+                      - 77.77323
+                      - 3051.59131
+                      - 2377.618
+                      - 80.37323 
+  # Start Clip             
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select 1 Clipping Plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":5.720323085784912,"height":79.55778342516659,"latitude":2375.421168683853,"layerid":9,"longitude":3049.238914966144,"nx":-0.00024939572285205476,"ny":-0.9999999672845599,"nz":0.000056856419839427755,"target-name":"ClipPlanesInDynamicMeshLayer","x":3049.238914966144,"y":2375.421168683853,"z":79.55778342516659}],"x":892,"y":516}
+  # Move the selected clipping plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 776
+      y: 706
+  # Pause Clipping
+  - command: MCDClipPause
+  # Rotate model
+  - command: MCDRotate
+    input:
+      - -12
+      - 4
+      - true
+  # Resume Clip
+  - command: MCDClipResume
+    validation:    
+      # Validates Planes Visibility  
+      - command: GetClipVisibleStatus
+        expected: true
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

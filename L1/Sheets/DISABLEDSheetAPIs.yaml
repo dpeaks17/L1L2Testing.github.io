@@ -1,0 +1,43 @@
+# Author: Dasu Yamala
+# Created: 03-Aug-2020
+# L1 test for validating getsheets,getactivesheet and setactivesheet APIs.
+settings:
+  name: SheetAPIs
+  description: This file is to check getsheets,getactivesheet and setactivesheet APIs.
+  classname: L1
+  suite: Sheets
+  file: SheetAPIs.yaml
+  exclusions:
+    - android
+    - ios
+    - web # remove
+    - desktop # remove
+calls:
+# Load 2D Drawing
+  - command: GVCLoadModel
+    input:
+      - model:
+        - 2DTestDrawing
+        # The below drawing is for temporary purposeand this will be replaced once proper drawing updated in argo.hexagonppm server. 
+        - https://hexlive19-radix.hexagonppm.com/2DWebAPI/V1/Projects('ProjectC')/Drawings('BASF_SSK_PID_MultipleSheets.igr')/
+        - Edges
+        - web-api
+        - configuration:
+            CameraHeading: top
+            CameraProjection: orthographic
+            CameraLocks: [pitch, yaw]
+            BackgroundColor: [1,1,1,1]
+    validation:
+      # Test getsheets and getactivesheet command
+      - command: GetSheets
+        expected: ["Master","Project1","Project2","Project3","Project4","Project5","Project6","Project7","Project8"]
+      - command: GetActiveSheet
+        expected: "Master"
+  # Test mcdsetactivesheet command          
+  - command: MCDSetActiveSheet
+    input:
+    - sheetName : "Project8"
+    validation:
+      # Test getactivesheet command
+      - command: GetActiveSheet
+        expected: "Project8"

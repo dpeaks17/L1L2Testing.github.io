@@ -1,0 +1,39 @@
+settings:
+  name: AccentManagerInitManualDefineAndApply 
+  description: "Tests out the accent manager, using initialize but with no given materials so those are defined, a bucket is created, and objects are added."
+  classname: L1
+  suite: Materials
+  file: AccentManagerInitManualDefineAndApply.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "MaterialName3"
+    - rgb:
+        r: 25
+        g: 20
+        b: 255
+        a: 100
+    - transparency: .5
+- command: MCDAccentInitialize
+  input:
+    - [] # initialized with no defaults, but we havea material that we have defined, so adding manually:
+- command: MCDAddBucket
+  input:
+    - "MaterialName3"
+# add to the bucket some render ids
+- command: MCDAddToBucket
+  input:
+    - ids: [34,35,36,37,38]
+    - material: "MaterialName3"
+  validation:
+    - command: GetObjectsInBucket
+      input: "MaterialName3"
+      expected: [34,35,36,37,38]
+# we can check that the material is applied by making sure the desired objects are in the bucket 

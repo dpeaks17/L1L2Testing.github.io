@@ -1,0 +1,35 @@
+# Author: Curt Werline
+# Revised: 2/5/2020 by Andy Sutton
+# L1 test for common view (Right) to Target
+settings:
+  name: CommonViewRightTarget
+  description: "Sets and gets the Right common view."
+  classname: L1
+  suite: CommonViews
+  file: CommonViewRightTarget.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Start common views command
+- command: MCDCommonViewsStart
+# Set the Right common view (rotate about target)
+- command: SetCommonView
+  input:
+    view: Right
+    target: true
+# Validate that the common view is set to Right
+  validation:
+    - command: GetCommonView
+      expected: Right
+# Stop/Deactivate common views before going to next test case
+- command: MCDCommonViewsStop

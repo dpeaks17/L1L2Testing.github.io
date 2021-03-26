@@ -1,0 +1,46 @@
+# Author: Brandon Hightower
+# Description: Verifies home shortcut works on 2D drawings
+# Last Revision: 8/13/2020
+settings:
+  name: 2D_HomeWithShortcut
+  description: Verifies home shortcut works on 2D drawings
+  classname: ShortcutKeys
+  suite: ShortCutKeys 
+  file: 2D_HomeWithShortcut.yaml
+  exclusions: # keyboard is not usable on mobile
+    - web       # To be re-enabled during implementation of TR-PB-244685
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Leave home area
+- command: MCDMove
+  input:
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+# use home shortcut
+- command: MCDKey
+  input:
+  - H
+  validation:
+    - command: GetCameraDirectionChanged
+      input: 
+        - prior: {"CameraPosition":{"center":{"x":366.08,"y":636.24,"z":0.00},"clip-far":5638.35,"clip-near":5417.24,"perspective":56.0000,"up":{"x":0.00,"y":1.0,"z":0.00}}}
+        - tolerance: .01
+      # verify H command returned to home
+      expected: {"xpos":true,"xneg":false,"ypos":false,"yneg":true,"zpos":false,"zneg":false,"clipnear":true,"clipfar":true} 

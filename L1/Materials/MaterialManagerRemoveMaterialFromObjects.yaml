@@ -1,0 +1,33 @@
+settings:
+  name: MaterialManagerRemoveMaterialFromObjects
+  description: "Test out removal of a material from an object by defining, applying, and then removing a material."
+  classname: L1
+  suite: Materials
+  file: MaterialManagerRemoveMaterialFromObjects.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "RedMaterial"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: .75
+- command: MCDApplyMaterialToObjects
+  input:
+    - ids: [59,35]
+    - name: "RedMaterial"
+    - model: "UtilityTestModel"
+- command: MCDRemoveMaterialFromObjects
+  input:
+    - ids: [35]
+    - name: "RedMaterial"
+#TODO: Validate that no material exists on object 35

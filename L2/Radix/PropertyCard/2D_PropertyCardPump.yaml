@@ -1,0 +1,40 @@
+# Author: Bryan Pugh
+# Revised: 6/30/2020
+# Test for testing property card (Hot Spotting) after selection of pump in 2D Drawing
+settings:
+  name: 2D_PropertyCardPump
+  description: Verifies pump property card displays in a 2D model. 
+  classname: PropertyCardTests
+  suite: Property Card
+  file: 2D_PropertyCardPump.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - desktop
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Pump 1011-MP-5004
+- command: MCDSelect
+  input:
+  - 4729
+  - false
+  - mcdrange:
+    - 2197.172363
+    - 310.720612
+    - 0
+    - 2348.288086
+    - 461.438446
+    - 0
+  # Validate property card visibility
+  validation:
+      - command: GetPropertyCardStatus
+        expected: true #True indicates property card is visible after selection

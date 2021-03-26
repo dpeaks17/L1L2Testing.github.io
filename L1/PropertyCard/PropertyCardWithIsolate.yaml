@@ -1,0 +1,51 @@
+# Author: Abhinav Awasthi
+# Created on: 19-Mar-2020
+# L1 Test for testing property card with isolate functionality
+settings:
+  name: PropertyCardWithIsolate
+  description: "Select and isolate an object. In isolate mode validate visibility of property card"
+  classname: L1
+  suite: PropertyCard
+  file: PropertyCardWithIsolate.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: true #true indicates property card is visible after selection
+  # Isolate selected objects
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: true
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: true

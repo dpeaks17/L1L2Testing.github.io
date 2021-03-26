@@ -1,0 +1,45 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Selects Single Clipping Plane (3 planes)
+settings:
+  name: SelectSingleClippingPlane (3 planes)
+  description: "Select Single Clipping Planes and validates by getting its ID"
+  classname: L1
+  suite: Clipping
+  file: SelectSingleClippingPlane.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Utility
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Go home
+  - command: mcdgohome
+  # Clip Start
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select only 1 plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":23.4774475097656,"height":74.726216872775694,"latitude":2399.0553705432799,"layerid":7,"longitude":2989.4987307756701,"nx":0.0010798235853721799,"ny":-0.0012027807057168301,"nz":0.999998693648946,"target-name":"Utility","x":2989.4987307756701,"y":2399.0553705432799,"z":74.726216872775694},{"distance":21.7256164550781,"height":75.543560958179299,"latitude":2398.1568721562999,"layerid":9,"longitude":2990.7610944164899,"nx":0.99999921672486802,"ny":-0.00093903486364119604,"nz":0.000827504184775741,"target-name":"ClipPlanesInDynamicMeshLayer","x":2990.7610944164899,"y":2398.1568721562999,"z":75.543560958179299}],"x":168,"y":220}
+    validation:
+      # Validate by getting the selected plane IDs
+      - command: GetClipSelectedPlane
+        expected: [1]
+      - command: GetClipEnabledPlanes
+        expected: [0, 1, 2]
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop
+  # Reset home
+  - command: mcdresethome

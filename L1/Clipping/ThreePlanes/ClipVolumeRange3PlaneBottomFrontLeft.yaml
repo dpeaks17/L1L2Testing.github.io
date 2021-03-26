@@ -1,0 +1,50 @@
+# Author: Charley Dong
+# Revised: 9/15/2020
+# L1 test for clip volume range
+settings:
+  name: ClipVolumeRange3PlaneBottomFrontLeft
+  description: "Sets and gets the clipping volume range."
+  classname: L1
+  suite: Clipping
+  file: ClipVolumeRange3PlaneBottomFrontLeft.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# GoHome
+- command: mcdgohome
+# Set the BottomFrontLeft common view (rotate about target)
+- command: SetCommonView
+  input:
+    view: BottomFrontLeft
+    target: true
+# Start 3 plane clipping at the range of the utility area model
+- command: MCDClipStart
+  input:
+    range:
+      min:
+        x: 2979.851
+        y: 2397.832
+        z: 67.155
+      max:
+        x: 3001.669
+        y: 2409.808
+        z: 74.703
+# Validate the clipping volume range
+  validation:
+    - command: GetClipVolumeRange
+      expected: {"max":{"x":2990.76,"y":2403.82,"z":70.93},"min":{"x":2979.85,"y":2392.91,"z":63.39}}
+      precision: 2
+# Stop/Deactivate Clip before going to next testcase
+- command: MCDClipStop
+# Reset Home
+- command: mcdresethome

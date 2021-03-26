@@ -1,0 +1,57 @@
+# FitToMultiple2D test
+settings:
+  name: FitToMultiple2D
+  description: Fit to Multiple 2D Objects test
+  classname: Fit
+  suite: FitTests
+  file: FitToMultiple2D.yaml
+  exclusions:
+    - web   # Re-enable this during implementation of DI-PB-245262 
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDSelect
+  input:
+  - 4321
+  - false
+  - mcdrange:
+    - 479.875244140625
+    - 1062.96923828125
+    - 0
+    - 678.2359008789062
+    - 1136.0872802734375
+    - 0
+  validation:
+    - command: GetSelection
+      expected: [4321]
+      precision: 2
+- command: MCDSelect
+  input:
+  - 3230
+  - true
+  - mcdrange:
+    - 415.57086181640625
+    - 483.94671630859375
+    - 0
+    - 728.75537109375
+    - 1553.375732421875
+    - 0
+  validation:
+    - command: getSelection
+      expected: [3230,4321]
+# test
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":572.16,"y":1018.66,"z":0.00},"clip-far":1025.76,"clip-near":985.54,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+      precision: 2

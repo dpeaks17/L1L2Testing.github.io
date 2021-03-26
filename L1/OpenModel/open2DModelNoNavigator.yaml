@@ -1,0 +1,34 @@
+# Author: Joshua Stankiewicz
+# Revised: 09/02/2020
+# L1 test for 2D Model
+settings:
+  name: Open2DModelNoNavigator
+  description: "Tests opening of a 2D Edges layer and verifying the navigator is not on."
+  classname: Load2DModel
+  suite: Models
+  file: Open2DModelNoNavigator.yaml
+  exclusions:
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+  validation:
+    - command: getnavigatorenabled
+      expected: false
+    - command: getflyenabled
+      expected: false
+    - command: getmeasureenabled
+      expected: false
+    - command: getclipenabled
+      expected: false

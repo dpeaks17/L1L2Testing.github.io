@@ -1,0 +1,52 @@
+# Author: Mark Goodrich
+# Revised: 11/20/2019
+# L2 test for basic multiselect isolate (select, fit, hide)
+settings:
+  name: MockMultiSelectIsolate
+  description: "Selects multiple objects, then fits to it, hides others."
+  classname: L1
+  suite: Isolate
+  file: MockMultiSelectIsolate.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+    - 59
+    - true
+    - mcdrange: # the optional range (evidentally not so optional) 
+      - 2984.682
+      - 2400.519
+      - 70.213
+      - 2990.031
+      - 2404.740
+      - 73.313
+- command: MCDSelect
+  input:
+    - 35
+    - true
+    - mcdrange: # the optional range (evidentally not so optional) 
+      - 2980.166
+      - 2398.155
+      - 70.165
+      - 2995.234
+      - 2409.498
+      - 70.203
+  validation:
+    - command: GetSelection
+      expected: [35,59]
+- command: MCDFit
+- command: MCDShow
+  input: 
+    - objects:
+      - 59
+      - 35
+    - True      
+  validation:
+    - command: GetHiddenObjects
+      expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[35,59]}}

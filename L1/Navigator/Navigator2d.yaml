@@ -1,0 +1,37 @@
+# Navigator2d test
+settings:
+  name: Navigator2d
+  description: Navigator2d test
+  classname: Navigator2d
+  suite: Navigator
+  file: Navigator2d.yaml
+  exclusions:
+   - ios
+   - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Test
+- command: ToggleNavigator
+  input: 
+    - true
+- command: MCDNavigator2d
+- command: MCDFit # movement to trigger camera update and reset 2d flag
+  validation:
+    - command: getNavigator2d
+      expected: true
+- command: MCDNavigator3dRestore
+  input:
+    - 45
+- command: MCDFit # movement to trigger camera update and reset 2d flag
+  validation:
+    - command: getNavigator2d
+      expected: false
+- command: ToggleNavigator
+  input: 
+    - false

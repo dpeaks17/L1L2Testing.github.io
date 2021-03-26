@@ -1,0 +1,64 @@
+# Author: Joshua Stankiewicz
+# Revised: 09/02/2020
+# L1 test for 3D Model settings
+settings:
+  name: EffectsEnabled3dContent
+  description: "Tests that visual settings are enabled with 3d content loaded."
+  classname: L1
+  suite: Settings
+  file: EffectsEnabled3dContent.yaml
+  exclusions:
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+
+- command: MCDFit
+  validation:
+  - command: getvisualsettingsenabled
+    input: 
+      - "Outline"
+    expected: true
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "AmbientOcclusion"
+    expected: true
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "Anti-Aliasing"
+    expected: true
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "DisplayAxis"
+    expected: true
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "Navigator"
+    expected: true
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "GradientBackground"
+    expected: true

@@ -1,0 +1,61 @@
+# Author: Abhinav Awasthi
+# Created on: 27-Jan-2020
+# L1 Test to Isolate Multiple Objects and check whether visual effects can be toggled or not
+settings:
+  name: IsolateAndToggleVisualEffects
+  description: "Isolate and Deisolate Objects & check whether visual effects (namely Transparency & Gradient Background) can be toggled or not"
+  classname: L1
+  suite: Isolate
+  file: IsolateAndToggleVisualEffects.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+  # Select another object
+  - command: MCDSelect
+    input:
+      - 35
+      - true
+      - mcdrange:
+          - 2980.16626
+          - 2398.155
+          - 70.165
+          - 2995.2395
+          - 2409.49878
+          - 70.3131256
+    validation:
+      - command: GetIsolateEnabledStatus
+        expected: true
+  # Isolate selected objects
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    validation:
+      - command: GetIsolateVisualEffectToggleStatus
+        expected: false #False indicates can't toggle visual effects while in isolate mode
+  # Stop/Deactivate Isolate
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    validation:
+      - command: GetIsolateVisualEffectToggleStatus
+        expected: true #True indicates visual effects can be toggled after coming out of isolate

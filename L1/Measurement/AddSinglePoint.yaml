@@ -1,0 +1,40 @@
+# AddSinglePoint test
+settings:
+  name: AddSinglePoint
+  description: "AddSinglePoint test"
+  classname: L1
+  suite: MeasurementTests
+  file: AddSinglePoint.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+# Test
+- command: ToggleMeasure
+  input:
+    - true
+- command: MeasureAddPoint
+  input:
+    point:
+      pos:
+        x: 3036.998474217327
+        y: 2381.095995747183
+        z: 77.76430635819054
+      ori:
+        x: 0.0010678268266680448
+        y: 0.0011465568709357746
+        z: 0.9999987725758518
+- command: MeasureSetPointPlacementMode
+  input:
+    - false
+  validation:
+    - command: GetMeasurementLines
+      expected: []
+- command: ToggleMeasure
+  input:
+    - false # as one L1 test should not impact other L1 test with data persisted when running all in a session

@@ -1,0 +1,32 @@
+settings:
+  name: LookZero
+  description: "Tests out the rotate camera api call doesn't change camera when 0 is used."
+  classname: L1
+  suite: Navigation
+  file: LookZero.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDLook
+  input:
+    - 100
+    - 100
+    - -45
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":17.61,"perspective":56.00,"up":{"x":0.14,"y":0.52,"z":0.84}}}
+      precision: 2
+- command: MCDLook
+  input:
+    - 100
+    - 100
+    - 0
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":17.61,"perspective":56.00,"up":{"x":0.14,"y":0.52,"z":0.84}}}
+      precision: 2

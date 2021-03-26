@@ -1,0 +1,38 @@
+# Author: Justin Ikerman
+# Revised: 4/24/2020
+# Tests selection of pipe to see if it has rendered in 2D Drawing
+settings:
+  name: 2D_PipeRender
+  description: Verifies Pipes immediately display in a 2D model. 
+  classname: Render
+  suite: L2_Radix
+  file: 2D_PipeRender.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the pipe run 1011-O-5225-65-6CB2B01
+- command: MCDSelect
+  input:
+  - 5600
+  - false
+  - mcdrange:
+    - -2262.58057
+    - 128.636383
+    - 0
+    - 500.647461
+    - 131.310547
+    - 0
+  validation:
+    - command: getSelection
+      expected: [5600]  # Expected ID
+      precision: 1

@@ -1,0 +1,52 @@
+# Author: Satya Patnaik
+# Created: 03-Jan-2020
+# Select and Move 3 Clipping Plane (3 planes)
+settings:
+  name: ThreePlaneClipping (3 planes)
+  description: "Selects all the 3 planes at once and performs clipping"
+  classname: L1
+  suite: Clipping
+  file: ThreePlaneClipping.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of TR-PB-245136.
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Utility
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Go home
+  - command: mcdgohome
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734   
+  # Select all the 3 Clipping planes
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":23.4774475097656,"height":74.726216872775694,"latitude":2399.0553705432799,"layerid":7,"longitude":2989.4987307756701,"nx":0.0010798235853721799,"ny":-0.0012027807057168301,"nz":0.999998693648946,"target-name":"Utility","x":2989.4987307756701,"y":2399.0553705432799,"z":74.726216872775694},{"distance":21.7256164550781,"height":75.543560958179299,"latitude":2398.1568721562999,"layerid":9,"longitude":2990.7610944164899,"nx":0.99999921672486802,"ny":-0.00093903486364119604,"nz":0.000827504184775741,"target-name":"ClipPlanesInDynamicMeshLayer","x":2990.7610944164899,"y":2398.1568721562999,"z":75.543560958179299}],"x":168,"y":220}
+  # Move the 1 selected planes
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 180
+      y: 220
+    validation:
+      - command: GetClipVolumeRangeChanged
+        input:
+          tolerance: 0.01
+        expected: true
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop 
+  # Reset home
+  - command: mcdresethome
+       

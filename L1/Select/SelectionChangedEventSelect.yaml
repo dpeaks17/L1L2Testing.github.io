@@ -1,0 +1,42 @@
+# Author: Derek Brown (derek.brown@hexagon.com)
+# Description: A test used to verify the MCDSelectionChanged class
+# Last Revision: 3/16/2021
+settings:
+  name: SelectionChangedEventSelect # Note, this must be unique out of all tests
+  description: "A test used to verify the MCDSelectionChanged class."
+  classname: L1
+  suite: SelectTests
+  file: SelectionChangedEventSelect.yaml
+
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# test selection
+- command: MCDSelect
+  input:
+    - 35
+    - false
+    - mcdrange:
+      - 3045.99121
+      - 2375.418
+      - 77.77323
+      - 3051.59131
+      - 2377.618
+      - 80.37323
+    - "UtilityTestModel"
+  validation:
+    - command: GetSelectionChanged
+      expected: {"IDs":[35],"isSelected":true,"isMultiSelect":false, "target" : "UtilityTestModel"}
+# now deselect
+- command: MCDSelect
+  input:
+    - 35
+    - false
+  validation:
+    - command: GetSelectionChanged
+      expected: {"IDs":[35],"isSelected":false,"isMultiSelect":false, "target" : ""}

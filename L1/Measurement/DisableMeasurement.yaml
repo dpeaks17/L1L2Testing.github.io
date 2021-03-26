@@ -1,0 +1,26 @@
+# EnableMeasurement test
+settings:
+  name: DisableMeasurement
+  description: "DisableMeasurement test"
+  classname: L1
+  suite: MeasurementTests
+  file: DisableMeasurement.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+# Test
+- command: ToggleMeasure
+  input:
+    - true
+- command: ToggleMeasure
+  input:
+    - false
+  validation:
+    - command: GetMeasurePointPlacementMode
+      expected: false

@@ -1,0 +1,61 @@
+# Author: Curt Werline
+# Revised: 12/17/2019
+# L1 test for clip volume range
+settings:
+  name: ClipVolumeRange6Plane
+  description: "Sets and gets the clipping volume range."
+  classname: L1
+  suite: Clipping
+  file: ClipVolumeRange6Plane.yaml
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Select the utility area tank and set its oriented range
+- command: MCDSelect
+  input:
+  - 282
+  - false
+  - mcdrange:
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323
+# Start 6 plane clipping at the oriented range of the tank
+- command: MCDClipStart
+  input:
+    range:
+      min:
+        x: 3045.99121
+        y: 2375.418
+        z: 77.77323
+      max:
+        x: 3051.59131
+        y: 2377.618
+        z: 80.37323
+# Set the clip volume range to the tank's oriented range
+- command: SetClipVolumeRange
+  input:
+    range:
+      min:
+        x: 3045.99121
+        y: 2375.418
+        z: 77.77323
+      max:
+        x: 3051.59131
+        y: 2377.618
+        z: 80.37323
+# Validate that the tank's range is correct. Note that max must preceed min
+  validation:
+    - command: GetClipVolumeRange
+      expected: {"max":{"x":3051.591,"y":2377.62,"z":80.37},"min":{"x":3045.99,"y":2375.42,"z":77.77}}
+      precision: 2
+# Stop/Deactivate Clip before going to next testcase
+- command: MCDClipStop   

@@ -1,0 +1,52 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Reset Clipping Plane (3 planes)
+settings:
+  name: ResetClipPlanes (3 planes)
+  description: "Reset planes after performing some operation using them"
+  classname: L1
+  suite: Clipping
+  file: ResetClipPlanes.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734    
+  # Select a clipping plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":73.91886901855469,"height":74.22123765792642,"latitude":2375.8139304072665,"layerid":7,"longitude":3048.6209384802473,"nx":0.0005647916536655103,"ny":-0.0006077073735324095,"nz":0.9999996558510088,"target-name":"Refining","x":3048.6209384802473,"y":2375.8139304072665,"z":74.22123765792642},{"distance":69.00704193115234,"height":77.52111420923065,"latitude":2373.0981248720564,"layerid":9,"longitude":3051.041933321669,"nx":0.0005688380959988289,"ny":-0.0006120509417022412,"nz":0.9999996509083717,"target-name":"ClipPlanesInDynamicMeshLayer","x":3051.041933321669,"y":2373.0981248720564,"z":77.52111420923065}],"x":974,"y":638}
+  # Move the selected plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 527
+      y: 698
+  # Hide a plane
+  - command: MCDClipHidePlane
+    input:
+      planeId: [2]
+  # Now Reset the clipping plane
+  - command: MCDClipResetPlanes
+    validation:
+      # Validate whether the planes ClipVolumeRange is same as it was in the beginning
+      - command: GetClipVolumeRangeChanged
+        input:
+          tolerance: 0.01
+        expected: false
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop        

@@ -1,0 +1,50 @@
+# Author: Satya Patnaik
+# Created on: 29-Dec-2020
+# L2 Test to check that there is no crash when something goes wrong while loading 2D drawing and then immediately a 3D model is loaded.
+settings:
+  name: 2D_OpenDrawingThenOpenModel.yaml
+  description: "Verifies that there is no crash, when loading 2D and 3D models one after the other."
+  classname: Open
+  suite: OpenDrawings
+  file: 2D_OpenDrawingThenOpenModel.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - ios
+    - android
+calls:
+# Load a drawing
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Validate drawing was loaded
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+          - displayName
+      expected: {"models":[{"id":"2DTestDrawing","displayName":"2DTestDrawing"}]} 
+# Load a model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Validate model was loaded
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+          - displayName
+      expected: {"models":[{"id":"UtilityTestModel","displayName":"UtilityTestModel"}]}

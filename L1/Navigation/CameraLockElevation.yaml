@@ -1,0 +1,51 @@
+# Elevation Lock with MCDMove
+settings:
+  name: CameraLockElevation
+  description: "Tests the camera lock for Elevation with MCDMove."
+  classname: L1
+  suite: Navigation
+  file: CameraLockElevation.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSetLocks
+  input:
+    - locks:
+        on: #enable locks
+        - elevation
+# Navigate somewhere else
+- command: MCDMove
+  input:
+    - -10
+    - -112
+    - 228
+    - 105
+    - 45
+  validation: #Verify that camera state is locked
+    - command: getCameraState
+      input: 
+        - isElevationLocked
+      expected: true
+    - command: getCameraState
+      input: 
+        - isPitchAngleLocked
+      expected: false
+    - command: getCameraState
+      input: 
+        - isYawAngleLocked
+      expected: false
+    - command: getCameraState
+      input: 
+        - isCenterLocked
+      expected: false     
+    #Verify that camera position is correct
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2902.60,"y":2447.20,"z":85.63},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+      precision: 2    
+                       
+      

@@ -1,0 +1,57 @@
+settings:
+  name: AccentManagerResetBucket
+  description: "Tests the accent manager's reset bucket function."
+  classname: L1
+  suite: Materials
+  file: AccentManagerResetBucket.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "Material1"
+    - rgb:
+        r: 25
+        g: 20
+        b: 255
+        a: 100
+    - transparency: .5
+- command: MCDDefineMaterial
+  input:
+    - name: "Material2"
+    - rgb:
+        r: 25
+        g: 20
+        b: 0
+        a: 100
+    - transparency: .5
+- command: MCDAccentInitialize
+  input:
+    - materials: ["Material1", "Material2"]
+- command: MCDAddToBucket
+  input:
+    - ids: [34,35,36,37,38]
+    - material: "Material1"
+  validation:
+    - command: GetObjectsInBucket
+      input: "Material1"
+      expected: [34,35,36,37,38]
+- command: MCDAddToBucket
+  input:
+    - ids: [35]
+    - material: "Material2"
+- command: MCDAccentReset
+  input:
+    - "Material2"
+  validation:
+    - command: GetObjectsInBucket
+      input: "Material2"
+      expected: [] # bucket corresponding to 'Material2' should be the only one cleared
+    - command: GetObjectsInBucket
+      input: "Material1"
+      expected: [34,35,36,37,38] # bucket corresponding to 'Material1' should still be filled

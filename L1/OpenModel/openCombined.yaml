@@ -1,0 +1,29 @@
+# loads a model
+settings:
+  name: OpenCombined
+  description: "Tests opening of a combined model"
+  classname: L1
+  suite: Models
+  file: openCombined.yaml
+  exclusions:
+    - web
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 305_Matterport_Combined-matterport
+      - https://argo.hexagonppm.com/graphicsamples/matterport/output/
+      - HSPC
+      - file
+    - model:
+      - 305_Matterport_Combined-campus305
+      - https://argo.hexagonppm.com/graphicsamples/campus305/
+      - parametrics
+      - file
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - displayName
+          - id
+      expected: {"models":[{"displayName":"305_Matterport_Combined-matterport","id":"305_Matterport_Combined-matterport"},{"displayName":"305_Matterport_Combined-campus305","id":"305_Matterport_Combined-campus305"}]}

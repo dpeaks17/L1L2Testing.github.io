@@ -1,0 +1,40 @@
+# FitTo2DModel test
+settings:
+  name: FitTo2DModel
+  description: Fit to 2D Model test
+  classname: Fit
+  suite: FitTests
+  file: FitTo2DModel.yaml
+  exclusions:
+    - android
+    - web   # To be re-enabled during implementation of TR-PB-244685
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Move camera so we can fit after
+- command: MCDMove
+  input:
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+# Test
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":370.41,"y":631,"z":0},"clip-far":5646.9,"clip-near":5425.45,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+      precision: 2
+      tolerance: .5

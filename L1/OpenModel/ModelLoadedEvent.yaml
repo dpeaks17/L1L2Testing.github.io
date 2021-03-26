@@ -1,0 +1,30 @@
+# Author: Wesley Nelson (wesley.nelson@hexagon.com)
+# Created: 2020-08-18
+# Tests that MODEL_LOADED_EVENT occurs upon loading a model
+settings:
+  name: ModelLoadedEvent
+  description: "Tests that MODEL_LOADED_EVENT occurs upon loading a model"
+  classname: L1
+  suite: OpenModel
+  file: ModelLoadedEvent.yaml
+  exclusions:
+    - desktop
+calls:
+  - command: MCDEventSubscribe
+    input:
+      event: "ModelLoadedEvent"
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+    validation:
+      - command: WasEventRecorded
+        input:
+          event: "ModelLoadedEvent"
+        expected: true
+  - command: MCDEventUnsubscribe
+    input:
+      event: "ModelLoadedEvent"

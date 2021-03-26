@@ -1,0 +1,36 @@
+# Performs a ZoomArea (FitToBox) command on a 2D Drawing
+settings:
+  name: ZoomArea2DDrawing 
+  description: "Performs a ZoomArea (FitToBox) command on a 2D Drawing"
+  classname: ZoomArea
+  suite: ZoomArea
+  file: ZoomArea2DDrawing.yaml
+  exclusions:
+    - android
+    - web     # To be re-enabled during implementation of TR-PB-244685
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: mcdfittobox
+  input:
+    - 208 # x1
+    - 168 # y1
+    - 373 # x2
+    - 252 # y2
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":767.11,"y":101.98,"z":0},"clip-far":1819.8,"clip-near":1748.44,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 2
+    tolerance: 0.5

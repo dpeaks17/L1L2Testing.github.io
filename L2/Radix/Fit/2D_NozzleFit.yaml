@@ -1,0 +1,44 @@
+# Author: Bryan Pugh
+# Revised: 7/01/2020
+# Tests the Fit command after selection of a Nozzle in 2D Drawing
+settings:
+  name: 2D_NozzleFit
+  description: Verifies selected nozzle is Fit to the view in a 2D model
+  classname: 2DFitTests
+  suite: Fit
+  file: 2D_NozzleFit.yaml
+  exclusions:
+    - web
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Nozzle N2 for Vessel
+- command: MCDSelect
+  input:
+  - 4766
+  - false
+  - mcdrange:
+    - 2553.005859
+    - 825.905396
+    - 0
+    - 2616.790527
+    - 879.986511
+    - 0
+# Test Fit
+- command: MCDFit
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2584.90,"y":852.95,"z":0.00},"clip-far":200.00,"clip-near":58.78,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+    precision: 2

@@ -1,0 +1,54 @@
+# Author: Bryan Pugh
+# Revised: 05/12/2020
+# Tests Set Home Command for 2D Drawing
+settings:
+  name: 2D_GoHome
+  description: "Tests Go Home Command in 2D Drawing"
+  classname: Home
+  suite: Feature Home
+  file: 2D_GoHome.yaml
+  exclusions:
+    - web       # To be re-enabled during implementation of TR-PB-244685
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDFit
+# Navigate somewhere
+- command: MCDMove
+  input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100
+# set home
+- command: MCDSetHome
+# Navigate somewhere else
+- command: MCDMove
+  input:
+    - -287
+    - -20
+    - 10
+    - 100
+    - 100
+# Test home command
+- command: MCDGoHome
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":370.4,"y":630.9,"z":0},"clip-far":5646.9,"clip-near":5425.4,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 1
+    tolerance: 0.5    

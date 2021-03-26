@@ -1,0 +1,25 @@
+# Author: Kiran Tadisetti
+# Revised: 3/12/2020
+# L1 test for camera Projection setting
+settings:
+  name: SetOrthographicProjection
+  description: "Sets camera projection"
+  classname: L1
+  suite: CameraTests
+  file: SetOrthographicProjection.yaml
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: MCDSetCameraProjection
+  input:
+    orthographic: true
+  validation:
+    - command: GetCameraProjection
+      expected: true

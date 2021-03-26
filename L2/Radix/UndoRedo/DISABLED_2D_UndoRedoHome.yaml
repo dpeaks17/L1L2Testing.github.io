@@ -1,0 +1,59 @@
+# Author: Bryan Pugh
+# Revised: 07/28/2020
+# Tests Undo and Redo of Home Command
+settings:
+  name: 2D_UndoRedoHome
+  description: "Tests Undo and Redo of Home Command"
+  classname: UndoRedo
+  suite: UndoRedoTests
+  file: 2D_UndoRedoHome.yaml
+  exclusions:
+    - web       # To be re-enabled during implementation of TR-PB-244685
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDFit
+# Navigate somewhere
+- command: MCDMove
+  input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100
+  # validation: 
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":2250.77,"y":1087.91,"z":0.00},"clip-far":4773.42,"clip-near":4586.23,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+  #   precision: 2
+# Select the Home Command
+- command: MCDGoHome
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":370.41,"y":630.92,"z":0},"clip-far":5646.9,"clip-near":5425.45,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 2
+# Test Undo
+- command: MCDUndo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":378.2,"y":630.92,"z":0},"clip-far":5661.84,"clip-near":5439.8,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 2
+# Test Redo
+- command: MCDRedo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":370.41,"y":630.92,"z":0},"clip-far":5646.9,"clip-near":5425.45,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 2

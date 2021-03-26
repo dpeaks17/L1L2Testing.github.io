@@ -1,0 +1,29 @@
+settings:
+  name: MaterialManagerApplyMaterialToSingleObject
+  description: "Tests applying materials to a single object by id."
+  classname: L1
+  suite: Materials
+  file: MaterialManagerApplyMaterialToSingleObject.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "MaterialName"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: .75
+- command: MCDApplyMaterialToObjects
+  input:
+    - ids: [35]
+    - name: "MaterialName"
+    - model: "UtilityTestModel"
+#TODO validate that the materials have been applied.

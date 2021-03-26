@@ -1,0 +1,62 @@
+# Author: Derek Brown
+# Description: A test to verify that the crosshairs on zoom area are properly placed despite parent element style changes.
+# Last Revision: 10/2/2020
+settings:
+  name: ZoomAreaCrosshairOffsetDOM 
+  description: "A test to verify that the crosshairs on zoom area are properly placed despite parent element style changes."
+  classname: L1
+  suite: ZoomArea
+  file: ZoomAreaCrosshairOffsetDOM.yaml
+  exclusions: 
+   - desktop
+   - android
+   - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# check normal behavior before modifying DOM
+- command: MCDStartCommand
+  input:
+    commandName: "zoomarea"
+  validation:
+    - command: GetDOMProperty
+      input: 
+        id: "verticalLine"
+        filter: ["style.left", "style.top"]
+      expected: {"style.left":"100px","style.top":"0px"}
+- command: MCDStopCommand
+  input:
+    commandName: "zoomarea"
+    commandArgs:
+      immediate: true
+# modify dom and check offset
+- command: ModifyDOM
+  input:
+    class: "UxtShell-root-1"
+    property: "style"
+    value: "margin-left:25px; margin-top:30px;"
+  validation:
+    - command: GetDOMProperty
+      input: 
+        class: "UxtShell-root-1"
+        filter: ["style.margin-left", "style.margin-top"]
+      expected: {"style.margin-left":"25px","style.margin-top":"30px"}
+- command: MCDStartCommand
+  input:
+    commandName: "zoomarea"
+  validation:
+    - command: GetDOMProperty
+      input: 
+        id: "verticalLine"
+        filter: ["style.left", "style.top"]
+      expected: {"style.left":"75px","style.top":"0px"}
+- command: MCDStopCommand
+  input:
+    commandName: "zoomarea"
+    commandArgs:
+      immediate: true

@@ -1,0 +1,48 @@
+# Author: Abhinav Awasthi
+# Created on: 23-Jan-2020
+# L1 test to hide an object then isolate and deisolate another object
+settings:
+  name: HideAndIsolate
+  description: "Hide one object, then isolate and deisolate another object and verify that 1st object remains hidden."
+  classname: L1
+  suite: Isolate
+  file: HideAndIsolate.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Hide an object
+  - command: MCDHide
+    input:
+      - objects:
+        - 59
+  # Select another object
+  - command: MCDSelect
+    input:
+      - 35
+      - true
+      - mcdrange:
+          - 2980.16626
+          - 2398.155
+          - 70.165
+          - 2995.2395
+          - 2409.49878
+          - 70.3131256
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+        commandName: isolate
+  # Deactivate Isolate
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    validation:
+      - command: GetHiddenObjects
+        expected: { "UtilityTestModel": { "Hidden": [59], "Isolated": [] } }

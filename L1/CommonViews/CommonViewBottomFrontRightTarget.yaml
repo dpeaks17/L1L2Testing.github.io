@@ -1,0 +1,35 @@
+# Author: Curt Werline
+# Revised: 2/10/2020 by Andy Sutton
+# L1 test for common view (BottomFrontRight) with a target
+settings:
+  name: CommonViewBottomFrontRightTarget
+  description: "Sets and gets the BottomFrontRight common view with a target."
+  classname: L1
+  suite: CommonViews
+  file: CommonViewBottomFrontRightTarget.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Start common views command
+- command: MCDCommonViewsStart
+# Set the BottomFrontRight common view (rotate about target)
+- command: SetCommonView
+  input:
+    view: BottomFrontRight
+    target: true
+# Validate that the common view is set to BottomFrontRight
+  validation:
+    - command: GetCommonView
+      expected: BottomFrontRight
+# Stop/Deactivate common views before going to next test case
+- command: MCDCommonViewsStop

@@ -1,0 +1,33 @@
+# Author: Wesley Nelson (wesley.nelson@hexagon.com)
+# Created: 2020-08-18
+# Tests that the SNAPSHOT_EVENT occurs
+settings:
+  name: SnapshotEvent
+  description: "Tests that the SNAPSHOT_EVENT occurs"
+  classname: L1
+  suite: Snapshot
+  file: SnapshotEvent.yaml
+  exclusions:
+    - desktop
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  - command: MCDEventSubscribe
+    input:
+      event: "screenShotAvailable"
+  - command: MCDStartCommand
+    input:
+      commandName: snapshot
+    validation:
+      - command: WasEventRecorded
+        input:
+          event: "screenShotAvailable"
+        expected: true
+  - command: MCDEventUnsubscribe
+    input:
+      event: "screenShotAvailable"

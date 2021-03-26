@@ -1,0 +1,70 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Select and Move All the Clipping Planes one by one (3 planes)
+settings:
+  name: SelectAndMoveSingleClipPlane (3 planes)
+  description: "Selects one plane at a time and moves it"
+  classname: L1
+  suite: Clipping
+  file: SelectAndMoveSingleClipPlane.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of TR-PB-245136
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - utility
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Go home
+  - command: mcdgohome
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734    
+  # Select a clipping plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":23.4774475097656,"height":74.726216872775694,"latitude":2399.0553705432799,"layerid":7,"longitude":2989.4987307756701,"nx":0.0010798235853721799,"ny":-0.0012027807057168301,"nz":0.999998693648946,"target-name":"Utility","x":2989.4987307756701,"y":2399.0553705432799,"z":74.726216872775694},{"distance":21.7256164550781,"height":75.543560958179299,"latitude":2398.1568721562999,"layerid":9,"longitude":2990.7610944164899,"nx":0.99999921672486802,"ny":-0.00093903486364119604,"nz":0.000827504184775741,"target-name":"ClipPlanesInDynamicMeshLayer","x":2990.7610944164899,"y":2398.1568721562999,"z":75.543560958179299}],"x":168,"y":220}
+  # Move the selected plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 180
+      y: 220
+  # Select another clipping plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":21.290016174316399,"height":76.097235866930305,"latitude":2403.8514875306601,"layerid":9,"longitude":2997.5884372560399,"nx":4.6573684455187802e-05,"ny":-0.99999999871438605,"nz":2.00529116721275e-05,"target-name":"ClipPlanesInDynamicMeshLayer","x":2997.5884372560399,"y":2403.8514875306601,"z":76.097235866930305}],"x":372,"y":214}
+  # Move the currently selected plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 395
+      y: 200
+  # Select the last remaining plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":19.089281082153299,"height":70.937744160822106,"latitude":2396.2149057854599,"layerid":9,"longitude":2998.5164785454699,"nx":0.0011051197720458,"ny":-0.00118627193386215,"nz":0.99999868573373096,"target-name":"ClipPlanesInDynamicMeshLayer","x":2998.5164785454699,"y":2396.2149057854599,"z":70.937744160822106}],"x":268,"y":412}
+  # Move the currently selected plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 268
+      y: 400
+    validation:
+      - command: GetClipVolumeRangeChanged
+        input:
+          tolerance: 0.01
+        expected: true
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop 
+  # reset home
+  - command: mcdresethome
+       

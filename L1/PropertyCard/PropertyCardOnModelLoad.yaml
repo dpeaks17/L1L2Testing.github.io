@@ -1,0 +1,50 @@
+# Author: Abhinav Awasthi
+# Created on: 19-Mar-2020
+# L1 Test for testing property card on model load
+settings:
+  name: PropertyCardOnModelLoad
+  description: "Load a model, select an object. Again load a model and validate visibility of property card"
+  classname: L1
+  suite: PropertyCard
+  file: PropertyCardOnModelLoad.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: true #true indicates property card is visible after selection
+  # Close the existing model
+  - command: MCDCloseModel
+    input:
+      - "UtilityTestModel"
+  # Load another model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - RefiningTestModel
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+    # Validate property card visibility
+    validation:
+      - command: GetPropertyCardStatus
+        expected: false #false indicates as no object is selected property card is hidden

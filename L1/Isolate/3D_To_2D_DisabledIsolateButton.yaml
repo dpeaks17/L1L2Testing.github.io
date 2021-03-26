@@ -1,0 +1,65 @@
+# Author: Abhinav Awasthi
+# Description: To validate if Isolate button is disabled in property card after switching model from 3D to 2D
+# CREATED ON: 12-Nov-2020
+settings:
+  name: 3D_To_2D_DisabledIsolateButton
+  description: Verify that isolate disable works properly if model is switched from 3D to 2D
+  classname: L1
+  suite: Isolate
+  file: 3D_To_2D_DisabledIsolateButton.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    validation:
+      - command: GetSelection
+        expected: [59]
+      - command: GetIsolateEnabledStatus
+        expected: true
+  # Load a 2D Drawing
+  - command: GVCLoadModel
+    input:
+      - model:
+        - 2DTestDrawing
+        - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+        - Edges
+        - web-api
+        - configuration:
+            CameraHeading: top
+            CameraProjection: orthographic
+            CameraLocks: [pitch, yaw]
+            BackgroundColor: [1,1,1,1]
+  - command: MCDSelect
+    input:
+    - 4363
+    - false
+    - mcdrange:
+      - 443.449677
+      - 974.662109
+      - 0.000000
+      - 491.888763
+      - 1026.937988
+      - 0.000000
+    # Isolate command should be disabled in 2D drawing
+    validation:
+      - command: GetSelection
+        expected: [4363]
+      - command: GetIsolateEnabledStatus
+        expected: false

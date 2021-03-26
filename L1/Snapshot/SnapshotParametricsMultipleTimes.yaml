@@ -1,0 +1,29 @@
+# Author: Derek Brown (derek.brown@hexagon.com)
+# Description: Snapshot test on a parametric model by taking several snapshots.
+# Last Revision: 1/31/2020
+settings:
+  name: SnapshotParametricsMultipleTimes
+  description: "Snapshot test on a parametric model after fitting to an object." 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotParametricsMultipleTimes.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: GetSnapshotTaken
+      expected: true
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: GetSnapshotTaken
+      expected: true

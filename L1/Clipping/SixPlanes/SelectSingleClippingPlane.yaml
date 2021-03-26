@@ -1,0 +1,50 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Selects Single Clipping Plane (6 planes)
+settings:
+  name: SelectSingleClippingPlane (6 planes)
+  description: "Select Single Clipping Planes and validates by getting its ID"
+  classname: L1
+  suite: Clipping
+  file: SelectSingleClippingPlane.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+          - configuration:
+              Selections:
+                - select:
+                    id: 282
+                    mcdrange:
+                      - 3045.99121
+                      - 2375.418
+                      - 77.77323
+                      - 3051.59131
+                      - 2377.618
+                      - 80.37323     
+  # Clip Start         
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select only 1 plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":5.720323085784912,"height":79.55778342516659,"latitude":2375.421168683853,"layerid":9,"longitude":3049.238914966144,"nx":-0.00024939572285205476,"ny":-0.9999999672845599,"nz":0.000056856419839427755,"target-name":"ClipPlanesInDynamicMeshLayer","x":3049.238914966144,"y":2375.421168683853,"z":79.55778342516659}],"x":892,"y":516}
+    validation:
+      # Validate by getting the selected plane IDs      
+      - command: GetClipSelectedPlane
+        expected: [0]
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

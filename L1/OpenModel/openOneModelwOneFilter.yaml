@@ -1,0 +1,21 @@
+# loads a model
+settings:
+  name: OpenOneModelwOneFilter
+  description: "Tests opening a model with validation on the id field of the models object."
+  classname: L1
+  suite: Models
+  file: openOneModelwOneFilter.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+      expected: {"models":[{"id":"UtilityTestModel"}]}

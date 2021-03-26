@@ -1,0 +1,49 @@
+settings:
+  name: UndoRedoWithShortcuts
+  description: Tests Undo Redo using Ctrl_Z and Ctrl_Y
+  classname: L1
+  suite: ShortcutKeys
+  file: UndoRedoWithShortcuts.yaml
+  exclusions: # keyboard is not usable on mobile
+    - android
+    - ios
+calls:
+- command: gvcloadmodel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+- command: MCDKey
+  input:
+  - V # select and fit to 
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2987.3567,"y":2402.6294,"z":71.7631},"clip-far":200.0000,"clip-near":0.1000,"perspective":56.0000,"up":{"x":-0.3683,"y":0.3953,"z":0.8415}}}
+      precision: 2
+- command: mcdkey
+  input:
+  - ctrl_Z
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.7598,"y":2403.8203,"z":70.9315},"clip-far":200.0000,"clip-near":15.0086,"perspective":56.0000,"up":{"x":-0.3683,"y":0.3953,"z":0.8415}}}
+      precision: 2
+- command: mcdkey
+  input:
+  - ctrl_Y
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2987.3567,"y":2402.6294,"z":71.7631},"clip-far":200.0000,"clip-near":0.1000,"perspective":56.0000,"up":{"x":-0.3683,"y":0.3953,"z":0.8415}}}
+      precision: 2

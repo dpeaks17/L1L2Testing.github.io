@@ -1,0 +1,50 @@
+# Author: Andy Sutton
+# Revised: 08/18/2020
+# L1 test for lookupby 
+settings:
+  name: LookUpByIdFitEdit
+  description: "Modified version of LookUpByIdFit test. Uses lookupBy command multiple times at once instead of calling a single lookUpBy command."
+  classname: L1
+  suite: Fit
+  file: LookUpByIdFitEdit.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+        - UtilityTestModel
+        - https://argo.hexagonppm.com/graphicsamples/utility/
+        - parametrics
+        - file
+        - configuration:
+            Selections:
+              - select:
+                  id: 4
+
+- command: lookUpBy
+  input:
+    - select:
+        names: [ "@a=0027!!80012##296467081995425289", "@a=0028!!240012##297311348884572804", "@a=0028!!240012##297311348884572866", "@a=0028!!240012##297311348884572689"]
+- command: lookUpBy
+  input:
+    - select:
+        names: ["@a=0027!!80012##296467081995425289", "@a=0028!!240012##297311348884571535"]
+- command: lookUpBy
+  input: 
+    - select:
+        names: ["@a=0028!!240012##297311348884572866", "@a=0028!!240012##297311348884571409"]
+- command: lookUpBy
+  input:
+    - select:
+        names: ["@a=0027!!20014##297311348884576712", "@a=0027!!20014##297311348884576515"]
+- command: MCDFit  
+  validation:
+    - command: getSelection
+      expected: [3, 4, 7, 11, 14, 23, 29, 39, 42]
+      precision: 2
+    - command: GetCameraPosition
+      expected: {"CameraPosition" : {"center" : {"x" : 2990.82,"y" : 2403.41,"z" : 70.91},"clip-far" : 200,"clip-near" : 14.72,"perspective" : 56,"up" : {"x" : -0.37,"y" : 0.4,"z" : 0.84}}}
+      precision: 2

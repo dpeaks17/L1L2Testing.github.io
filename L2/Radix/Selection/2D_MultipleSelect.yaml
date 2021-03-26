@@ -1,0 +1,108 @@
+# Author: Brandon Hightower
+# Description: Select several objects in 2D drawing
+# Last Revision: 8/13/2020
+settings:
+  name: 2D_MultipleSelect
+  description: Verifies multiple objects are selected correctly in 2D Drawing
+  classname: Selection
+  suite: Select  
+  file: 2D_MultipleSelect.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDSelect
+  input:
+  - 3713 
+  - true
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+- command: MCDSelect
+  input:
+  - 4305 
+  - true
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+- command: MCDSelect
+  input:
+  - 4156 
+  - true
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+- command: MCDSelect
+  input:
+  - 4348 
+  - true
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+- command: MCDSelect
+  input:
+  - 1423 
+  - true
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [1423,3713,4156,4305,4348] 
+- command: MCDSelect
+  input:
+  - 3713 
+  - true
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [1423,4156,4305,4348]
+- command: MCDSelect
+  input:
+  - 1423 
+  - false
+  - mcdrange: 
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323 
+  validation:
+    - command: getSelection
+      expected: [] 

@@ -1,0 +1,52 @@
+# Author: Ken Houser
+# Revised: 08/18/2020
+# L1 test fit by lookupby 
+settings:
+  name: FitToObjectLookedUp
+  description: "Testing Fit to object"
+  classname: L1
+  suite: FitTests
+  file: FitToObjectsLookedUp.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of Id map changes in gvc-react.
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+        - UtilityTestModel
+        - https://argo.hexagonppm.com/graphicsamples/utility/
+        - parametrics
+        - file
+        - configuration:
+            Selections:
+              - select:
+                  id: 4
+# Select one object
+- command: MCDSelect
+  input:
+    - 15
+    - true
+    - mcdrange:
+        - 2984.682373046875
+        - 2400.51904296875
+        - 70.21309661865234
+        - 2990.031005859375
+        - 2404.73974609375
+        - 73.31312561035156
+# Select another object
+- command: lookUpBy
+  input:
+    - select:
+        ids: [29,59]
+    - select:
+        names: ["@a=0028!!240012##297311348884571493", "@a=0027!!80012##296467081995425289", "@a=0028!!240012##297311348884571535", " @a=0028!!240012##297311348884572866", "@a=0028!!240012##297311348884571409", " @a=0027!!20014##297311348884576712", " @a=0027!!20014##297311348884576515"]
+  validation:
+    - command: getSelection
+      expected: [3, 4, 7, 11, 15, 23, 29, 34, 39, 42, 59]
+      precision: 2
+# Test
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.82,"y":2404.63,"z":70.91},"clip-far":200,"clip-near":13.18,"perspective":56,"up":{"x":-0.37,"y":0.4,"z" : 0.84}}}
+      precision: 2

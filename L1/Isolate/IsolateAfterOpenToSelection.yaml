@@ -1,0 +1,57 @@
+# Author: Andy Sutton
+# Revised: 12/15/2020
+# L1 test Isolate after Open Model to Selection
+settings: 
+  name: IsolateAfterOpenToSelection.yaml
+  description: "Test Isolate after Open Model to Selection."
+  classname: L1
+  suite: Isolate
+  file: IsolateAfterOpenToSelection.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+      - configuration:
+          Selections:
+            - select:
+                id: 55
+                mcdrange:
+                - 2984.78
+                - 2404.77
+                - 67.16
+                - 2986.15
+                - 2406.14
+                - 68.37
+            - select:
+                id: 56
+                mcdrange:
+                - 2983.05
+                - 2405.77
+                - 67.16
+                - 2984.4
+                - 2407.1
+                - 68.37
+# Isolate selected object
+- command: MCDStartCommand
+  input:
+    commandName: isolate
+# Test
+  validation:
+    - command: GetHiddenObjects
+      expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[55,56]}}
+    - command: GetCameraPosition
+      expected: {"CameraPosition": {"center": { "x": 2984.6, "y": 2405.94, "z": 67.76}, "clip-far": 200, "clip-near": 0.1, "perspective": 56, "up": { "x": -0.37, "y": 0.4, "z": 0.84}}}
+      precision: 2
+# Stop/Deactivate Isolate before going to next testcase
+- command: MCDStopCommand
+  input:
+    commandName: isolate
+    commandArgs:
+      immediate: true

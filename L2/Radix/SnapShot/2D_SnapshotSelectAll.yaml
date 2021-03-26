@@ -1,0 +1,45 @@
+# Author: Bryan Pugh
+# Revised: 05/13/2020
+# Description: Snapshot test on a 2D Drawing after selection
+settings:
+  name: 2D_SnapshotSelectAll
+  description: "Snapshot test on a 2D model" 
+  classname: Snapshot 
+  suite: SnapshotTest
+  file: 2D_SnapshotSelectAll.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDSelect
+  input:
+    - 4321
+    - false
+    - mcdrange:
+      - 479.875244140625
+      - 1062.96923828125
+      - 0
+      - 678.2359008789062
+      - 1136.0872802734375
+      - 0
+- command: MCDFit
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: getModels
+      input:
+        - filters:
+          - id
+      expected: {"models":[{"id":"2DTestDrawing"}]}
+    - command: GetSnapshotTaken
+      expected: true

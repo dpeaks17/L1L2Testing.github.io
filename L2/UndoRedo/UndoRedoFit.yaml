@@ -1,0 +1,62 @@
+# Tests Undo and Redo of Fit Command
+settings:
+  name: UndoRedoFit
+  description: "Tests Undo and Redo of Fit Command"
+  classname: UndoRedo
+  suite: UndoRedoTests
+  file: UndoRedoFit.yaml
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - RefiningTestModel
+      - https://argo.hexagonppm.com/graphicsamples/refining/
+      - parametrics
+      - file
+- command: MCDToggleFlyTo
+  input:
+  - false
+- command: MCDSelect
+  input:
+  - 249
+  - false
+  - mcdrange:
+    - 3043.0142
+    - 2413.6033
+    - 80.6367
+    - 3036.9041
+    - 2408.3899
+    - 67.1700
+- command: MCDFit
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3039.96,"y":2411.00,"z":73.90},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+- command: MCDSelect
+  input:
+  - 282
+  - false
+  - mcdrange:
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323
+- command: MCDFit
+  # validation:
+  # - command: GetCameraPosition
+  #   expected: {"CameraPosition":{"center":{"x":3048.79,"y":2376.52,"z":79.07},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+  #   precision: 2
+# Test
+- command: MCDUndo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":3039.96,"y":2411.00,"z":73.90},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+- command: MCDRedo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":3048.79,"y":2376.52,"z":79.07},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2

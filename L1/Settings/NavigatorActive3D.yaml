@@ -1,0 +1,22 @@
+settings:
+  name: NavigatorActive3D
+  description: "Tests out the Navigator being active in a three d model."
+  classname: L1
+  suite: MenuTests
+  file: NavigatorActive3D.yaml
+  exclusions: # keyboard is not usable on mobile
+    - desktop
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+  validation:
+  - command: getnavigatoractive
+    expected: true
+    precision: 2

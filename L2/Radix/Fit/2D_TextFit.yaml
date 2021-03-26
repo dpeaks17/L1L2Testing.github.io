@@ -1,0 +1,44 @@
+# Author: Bryan Pugh
+# Revised: 6/29/2020
+# Tests the Fit command after selection of Text in 2D Drawing
+settings:
+  name: 2D_TextFit
+  description: Verifies selected text is Fit to the view in a 2D model
+  classname: 2DFitTests
+  suite: Fit
+  file: 2D_TextFit.yaml
+  exclusions:
+    - web
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the central vessel's text 1011-O-5524-50-6CB2B01-N
+- command: MCDSelect
+  input:
+  - 4321
+  - false
+  - mcdrange:
+    - 479.875244
+    - 1057.24475
+    - 0
+    - 678.2359
+    - 1130.36279
+    - 0
+# Test Fit
+- command: MCDFit
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":579.06,"y":1093.80,"z":0.00},"clip-far":200.00,"clip-near":182.80,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+    precision: 2

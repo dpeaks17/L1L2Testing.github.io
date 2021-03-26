@@ -1,0 +1,43 @@
+# Author: Wesley Nelson (wesley.nelson@hexagon.com)
+# Created: 2020-08-18
+# Tests that the CLIP_PLANES_INITIALIZED event occurs
+settings:
+  name: ActivateClipEvent
+  description: "Tests that the CLIP_PLANES_INITIALIZED event occurs"
+  classname: L1
+  suite: Clipping
+  file: ActivateClipEvent.yaml
+  exclusions:
+    - desktop
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  - command: MCDEventSubscribe
+    input:
+      event: 21
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+    validation:
+      - command: WasEventRecorded
+        input:
+          event: 21
+        expected: true
+  - command: MCDClipStop   
+  - command: MCDEventUnsubscribe
+    input:
+      event: 21
+      

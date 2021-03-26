@@ -1,0 +1,76 @@
+# Author: Abhinav Awasthi
+# Created on: 23-Jan-2020
+# L1 test to Isolate multiple objects and zoom in/out isolated objects
+settings:
+  name: IsolateAndZoom
+  description: "Isolate an object and zoom in/out isolated object"
+  classname: L1
+  suite: Isolate
+  file: IsolateAndZoom.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156    
+  # Select another object
+  - command: MCDSelect
+    input:
+      - 35
+      - true
+      - mcdrange:
+          - 2980.16626
+          - 2398.155
+          - 70.165
+          - 2995.2395
+          - 2409.49878
+          - 70.3131256   
+  # Isolate selected objects
+  - command: MCDStartCommand
+    input:
+      commandName: isolate    
+  # Zoom out isolated objects
+  - command: MCDMove
+    input:
+      - 0
+      - 0
+      - -11
+      - 315
+      - 302
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.1784139465594,"y":2403.6346813424198,"z":72.07678265923491},"clip-far":200,"clip-near":10.017087857641261,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2
+  # Zoom in isolated objects
+  - command: MCDMove
+    input:
+      - 0
+      - 0
+      - 14
+      - 315
+      - 302
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.9910266508036,"y":2403.9325129329754,"z":71.55351195318084},"clip-far":200,"clip-near":3.6385502214734116,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2
+  # Stop/Deactivate Isolate before going to next testcase
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: true

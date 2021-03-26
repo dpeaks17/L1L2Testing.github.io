@@ -1,0 +1,32 @@
+# Author: Derek Brown (derek.brown@hexagon.com)
+# Description: Calls hide followed by show.
+# Last Revision: 1/15/2020
+settings:
+  name: HideShow
+  description: "Hide two objects, then show one of them to verify that the show api call works."
+  classname: L1 
+  suite: ShowHide 
+  file: HideShow.yaml 
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDHide
+  input:
+    - objects:
+      - 53
+      - 59
+  validation:
+    - command: GetHiddenObjects
+      expected: {"UtilityTestModel":{"Hidden":[53,59],"Isolated":[]}}
+- command: MCDShow # hide all except 53
+  input:
+    - objects:
+      - 53
+  validation:
+    - command: GetHiddenObjects
+      expected: {"UtilityTestModel":{"Hidden":[59],"Isolated":[]}}

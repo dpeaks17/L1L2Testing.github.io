@@ -1,0 +1,38 @@
+# Author: Justin Ikerman
+# Revised: 4/24/2020
+# Tests selection of vessel to see if it has rendered in 2D Drawing
+settings:
+  name: 2D_VesselRender
+  description: Verifies Vessels immediately display in a 2D model. 
+  classname: Render
+  suite: L2_Radix
+  file: 2D_VesselRender.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the central Vessel 1011-VES-301
+- command: MCDSelect
+  input:
+  - 3230
+  - false
+  - mcdrange:
+    - 415.570862
+    - 481.44928
+    - 0
+    - 728.7554
+    - 1551.54077
+    - 0
+  validation:
+    - command: getSelection
+      expected: [3230]  # Expected ID
+      precision: 1

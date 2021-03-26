@@ -1,0 +1,35 @@
+# Author: Curt Werline
+# Revised: 2/10/2020 by Andy Sutton
+# L1 test for common view (TopFrontLeft) without a target
+settings:
+  name: CommonViewTopFrontLeft
+  description: "Sets and gets the TopFrontLeft common view without a target."
+  classname: L1
+  suite: CommonViews
+  file: CommonViewTopFrontLeft.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Start common views command
+- command: MCDCommonViewsStart
+# Set the TopFrontLeft common view (no target)
+- command: SetCommonView
+  input:
+    view: TopFrontLeft
+    target: false
+# Validate that the common view is set to TopFrontLeft
+  validation:
+    - command: GetCommonView
+      expected: TopFrontLeft
+# Stop/Deactivate common views before going to next test case
+- command: MCDCommonViewsStop

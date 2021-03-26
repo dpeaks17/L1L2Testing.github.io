@@ -1,0 +1,40 @@
+# Author: Bryan Pugh
+# Revised: 6/29/2020
+# Test for testing property card (Hot Spotting) after selection of nozzle in 2D Drawing
+settings:
+  name: 2D_PropertyCardNozzle
+  description: Verifies nozzle property card displays in a 2D model. 
+  classname: PropertyCardTests
+  suite: Property Card
+  file: 2D_PropertyCardNozzle.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - desktop
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Nozzle N2 for Vessel 1011-VES-5003
+- command: MCDSelect
+  input:
+  - 4766
+  - false
+  - mcdrange:
+    - 2553.005859
+    - 825.905396
+    - 0
+    - 2616.790527
+    - 879.986511
+    - 0
+  # Validate property card visibility
+  validation:
+      - command: GetPropertyCardStatus
+        expected: true #True indicates property card is visible after selection

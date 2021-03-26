@@ -1,0 +1,46 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Pause Clipping (3 planes)
+settings:
+  name: PauseClip (3 planes)
+  description: "Calls Pause and checks whether clip planes are showing or not"
+  classname: L1
+  suite: Clipping
+  file: PauseClip.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select 1 Clipping Plane
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":73.91886901855469,"height":74.22123765792642,"latitude":2375.8139304072665,"layerid":7,"longitude":3048.6209384802473,"nx":0.0005647916536655103,"ny":-0.0006077073735324095,"nz":0.9999996558510088,"target-name":"Refining","x":3048.6209384802473,"y":2375.8139304072665,"z":74.22123765792642},{"distance":69.00704193115234,"height":77.52111420923065,"latitude":2373.0981248720564,"layerid":9,"longitude":3051.041933321669,"nx":0.0005688380959988289,"ny":-0.0006120509417022412,"nz":0.9999996509083717,"target-name":"ClipPlanesInDynamicMeshLayer","x":3051.041933321669,"y":2373.0981248720564,"z":77.52111420923065}],"x":974,"y":638}
+  # Move the selected clipping plane
+  - command: MCDClipManipulationUpdate
+    input:
+      x: 527
+      y: 698
+  # Pause Clipping
+  - command: MCDClipPause
+    validation:  
+      # Validates Planes Visibility    
+      - command: GetClipVisibleStatus
+        expected: false
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

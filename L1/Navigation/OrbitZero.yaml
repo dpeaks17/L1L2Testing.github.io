@@ -1,0 +1,38 @@
+settings:
+  name: OrbitZero
+  description: "Tests out the rotate camera around point api call."
+  classname: L1
+  suite: Navigation
+  file: OrbitZero.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDOrbit
+  input:
+    - -100 # delta x
+    - -100 # delta y
+    - 100 # x
+    - 100 # y
+    - 100 # z
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":-3551.92,"y":672.33,"z":70.93},"clip-far":200.00,"clip-near":0.1,"perspective":56.00,"up":{"x":-0.04,"y":-0.54,"z":0.84}}}
+      precision: 2
+      tolerance: 0.5
+- command: MCDOrbit
+  input:
+    - 0 # delta x
+    - 0 # delta y
+    - 0 # x
+    - 0 # y
+    - 0 # z
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":-3551.92,"y":672.33,"z":70.93},"clip-far":200.00,"clip-near":0.1,"perspective":56.00,"up":{"x":-0.04,"y":-0.54,"z":0.84}}}
+      precision: 2
+      tolerance: 0.5

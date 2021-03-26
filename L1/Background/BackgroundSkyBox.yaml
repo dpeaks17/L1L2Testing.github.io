@@ -1,0 +1,27 @@
+# Author: Randy B. Cleary
+# Revised: 3/2/2020
+# L1 test for background setting skybox
+settings:
+  name: BackgroundSkyBox
+  description: "Sets and gets the background skybox."
+  classname: L1
+  suite: Background
+  file: BackgroundSkyBox.yaml
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+#Set background to sky box with url to image
+- command: MCDSetBackground
+  input:
+    type: SkyBox
+    url: ./gvc-resources/background/gradient-skybox/GV_skygrad_
+# Validate that the background skybox is set to url
+  validation:
+    - command: MCDGetBackground
+      expected: {"type":SkyBox,"url":./gvc-resources/background/gradient-skybox/GV_skygrad_}

@@ -1,0 +1,29 @@
+# Tests fit with no range Command
+settings:
+  name: SelectionWithoutRange
+  description: "Tests Home Command"
+  classname: L1
+  suite: SelectionTests
+  file: SelectionWithoutRange.yaml
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+  - 282
+  - false
+  validation:
+    - command: getSelection
+      expected: [282]
+      precision: 2
+- command: MCDFit
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2

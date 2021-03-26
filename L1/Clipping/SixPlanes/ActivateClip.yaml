@@ -1,0 +1,49 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# L1 test for starting Clip (6 planes)
+settings:
+  name: ActivateClip (6 planes)
+  description: "Starts Clip and checks whether clip planes are showing or not"
+  classname: L1
+  suite: Clipping
+  file: ActivateClip.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+          - configuration:
+              Selections:
+                - select:
+                    id: 282
+                    mcdrange:
+                      - 3045.99121
+                      - 2375.418
+                      - 77.77323
+                      - 3051.59131
+                      - 2377.618
+                      - 80.37323 
+  # Start Clip             
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+    validation:
+      # Validates Planes Visibility
+      - command: GetClipVisibleStatus
+        expected: true      
+      - command: GetClipEnabledPlanes
+        expected: [0, 1, 2, 3, 4, 5]
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop   
+      

@@ -1,0 +1,54 @@
+# Author: Supreethi Gande
+# Created on: 23-Jan-2020
+# L1 test to Isolate an object and rotate it
+settings:
+  name: IsolateAndRotate
+  description: "Isolate a single object and rotate it."
+  classname: L1
+  suite: Isolate
+  file: IsolateAndRotate.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156   
+  # Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.356689453125,"y":2402.62939453125,"z":71.76310729980469},"clip-far":200,"clip-near":0.1,"perspective":56,"up":{"x":-0.36829099380970703,"y":0.3953331830305764,"z":0.8414709848078965}}}
+        precision: 2    
+  # Rotate isolated object
+  - command: MCDRotate
+    input:
+      - 28
+      - -2
+      - true
+    validation:
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":2987.3566894531245,"y":2402.62939453125,"z":71.76310729980467},"clip-far":200,"clip-near":0.1,"perspective":56,"up":{"x":-0.5800224365554973,"y":-0.17306442546128253,"z":0.7960041945442125}}}
+        precision: 2
+  # Stop/Deactivate Isolate before going to next testcase
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: true

@@ -1,0 +1,36 @@
+settings:
+  name: HomeWithShortcut
+  description: Tests Home Command with shortcutkey "H"
+  classname: L1
+  suite: ShortcutKeys
+  file: HomeWithShortcut.yaml
+  exclusions: # keyboard is not usable on mobile
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDKey
+  input:
+  - I
+  - I
+  - I
+  - I
+  validation:
+    - command: GetCameraDirectionChanged
+      input: 
+        - prior: {"CameraPosition":{"center":{"x":2990.7598,"y":2403.8203,"z":70.9315},"clip-far":200.0000,"clip-near":15.0086,"perspective":56.0000,"up":{"x":-0.3683,"y":0.3953,"z":0.8415}}}
+        - tolerance: .01
+      expected: {"xpos":false,"xneg":true,"ypos":true,"yneg":false,"zpos":true,"zneg":false,"clipnear":true,"clipfar":false}
+- command: MCDKey
+  input:
+  - H
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.7598,"y":2403.8203,"z":70.9315},"clip-far":200.0000,"clip-near":15.0086,"perspective":56.0000,"up":{"x":-0.3683,"y":0.3953,"z":0.8415}}}
+      precision: 2

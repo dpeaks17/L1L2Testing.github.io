@@ -1,0 +1,41 @@
+# Tests Set Home Command
+settings:
+  name: SetHome
+  description: "Tests Set Home Command"
+  classname: L1
+  suite: HomeTests
+  file: SetHome.yaml
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDFit
+# Navigate somewhere
+- command: MCDMove
+  input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100
+# set home
+- command: MCDSetHome
+# Navigate somewhere else
+- command: MCDMove
+  input:
+    - -287
+    - -20
+    - 10
+    - 100
+    - 100
+# Test home command
+- command: MCDGoHome
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2996.54,"y":2410.81,"z":72.76},"clip-far":200.00,"clip-near":10.14,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2

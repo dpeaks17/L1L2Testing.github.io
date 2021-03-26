@@ -1,0 +1,62 @@
+# Author: Ken Houser
+# Revised: 08/18/2020
+# L1 test fit to lookupby 
+settings:
+  name: BatchSelectFit
+  description: "Testing Fit to object via lookupby command"
+  classname: L1
+  suite: Fit
+  file: BatchSelectFit.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+        - UtilityTestModel
+        - https://argo.hexagonppm.com/graphicsamples/utility/
+        - parametrics
+        - file
+        - configuration:
+            IdMap: [precache]
+# Batch Select some objects
+- command: MCDBatchSelect
+  input:
+    - select:
+        ids: [3, 4, 7, 11, 15, 23, 29, 34, 39, 42, 59]
+  validation:
+    - command: getSelection
+      expected: [3, 4, 7, 11, 15, 23, 29, 34, 39, 42, 59]
+      precision: 2
+- command: MCDBatchDeselect
+  input:
+    - select:
+        ids: [3, 4, 7, 11, 15, 23, 29, 34, 39, 42, 59]
+  validation:
+    - command: getSelection
+      expected: [ ]
+      precision: 2
+- command: MCDBatchSelect
+  input:
+    - select:
+        ids: [3, 4, 7, 11, 15, 23, 29, 34, 39, 42, 59]
+  validation:
+    - command: getSelection
+      expected: [3, 4, 7, 11, 15, 23, 29, 34, 39, 42, 59]
+      precision: 2
+- command: MCDBatchDeselect
+  input:
+    - select:
+        ids: [3, 7, 15, 29, 39, 59]
+  validation:
+    - command: getSelection
+      expected: [4, 11, 23, 34, 42]
+      precision: 2
+# Test
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition" : {"center" : {"x" : 2993.20,"y" : 2404.17,"z" : 70.91},"clip-far" : 200,"clip-near" : 9.15,"perspective" : 56,"up" : {"x" : -0.37,"y" : 0.4,"z" : 0.84}}}
+      precision: 2

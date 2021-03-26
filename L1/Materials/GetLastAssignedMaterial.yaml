@@ -1,0 +1,60 @@
+settings:
+  name: GetLastAssignedMaterial
+  description: "Tests getting the material ID last assigned to an object id"
+  classname: L1
+  suite: Materials
+  file: GetLastAssignedMaterial.yaml
+  exclusions: # optional, may be excluded 
+    - android # don't run this test on android
+    - web # don't run this test on web platforms
+    - ios # don't run this test on ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - _utility-id
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "Material1"
+    - rgb:
+        r: 255
+        g: 255
+        b: 0
+        a: 100
+    - transparency: .5
+- command: MCDDefineMaterial
+  input:
+    - name: "Material2"
+    - rgb:
+        r: 25
+        g: 20
+        b: 255
+        a: 100
+    - transparency: .5
+- command: MCDAccentInitialize
+  input:
+    - materials: ["Material1", "Material2"]
+- command: MCDAddToBucket
+  input:
+    - ids: [34,35,36,37,38]
+    - material: "Material1"
+- command: MCDAddToBucket
+  input:
+    - ids: [35]
+    - material: "Material2"
+# Navigate somewhere to make sure that the material has been applied.
+- command: MCDMove
+  input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100
+  validation:
+  - command: GetLastAssignedMaterial
+    input: 
+      - 35
+    expected: 2

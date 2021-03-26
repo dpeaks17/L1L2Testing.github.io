@@ -1,0 +1,34 @@
+# NavigatorCompass test
+settings:
+  name: NavigatorCompass
+  description: NavigatorCompass rotation test
+  classname: NavigatorCompass
+  suite: Navigator
+  file: NavigatorCompass.yaml
+  exclusions:
+    - ios
+    - android
+    - desktop
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Test
+- command: ToggleNavigator
+  input: 
+    - true
+- command: MCDNavigatorCompass
+  input:
+    - 180
+- command: MCDFit # navigation to trigger camera update
+  validation:
+    - command: getNavigatorBearing
+      expected: 180
+      precision: 2
+- command: ToggleNavigator
+  input: 
+    - false

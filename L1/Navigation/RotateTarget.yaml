@@ -1,0 +1,23 @@
+settings:
+  name: RotateTarget
+  description: "Tests out the motion rotate api call."
+  classname: L1
+  suite: Navigation
+  file: RotateTarget.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDRotate
+  input:
+    - 100
+    - 100
+    - true
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.72,"perspective":56.00,"up":{"x":0.54,"y":0.00,"z":0.84}}}
+      precision: 2

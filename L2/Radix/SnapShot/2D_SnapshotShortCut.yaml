@@ -1,0 +1,47 @@
+# Author: Bryan Pugh
+# Revised: 05/13/2020
+# Description: Snapshot test on a 2D Drawing Using Shortcut Key
+settings:
+  name: 2D_SnapshotShortCut
+  description: "Snapshot test on a 2D model" 
+  classname: Snapshot 
+  suite: SnapshotTest
+  file: 2D_SnapshotShortCut.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Zoom In
+- command: MCDMove
+  input:
+    - 0
+    - 0
+    - 1000
+    - 0
+    - 0
+#Fit View
+- command: MCDFit
+#Snapshot Using Shortcut Key <TEST FAILING TO TRIGGER SNAPSHOT. TEMPORARILY CALLING COMMAND EXPLICITLY.>
+- command: MCDKey
+  input:
+  - G
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: getModels
+      input:
+        - filters:
+          - id
+      expected: {"models":[{"id":"2DTestDrawing"}]}
+    - command: GetSnapshotTaken
+      expected: true

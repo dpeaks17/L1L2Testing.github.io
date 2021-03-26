@@ -1,0 +1,42 @@
+# Author: Mark Goodrich
+# Revised: 11/26/2019
+# L1 test for multi select
+settings:
+  name: multiSelect
+  description: "Selects multiple objects"
+  classname: L1
+  suite: Navigation
+  file: multiSelect.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+  - 59
+  - true
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+- command: MCDSelect
+  input:
+  - 35
+  - true
+  - mcdrange:
+    - 2980.1472
+    - 2398.77099
+    - 70.160000
+    - 2995.14721
+    - 2409.137207
+    - 70.360000
+  validation:
+    - command: getSelection
+      expected: [35, 59]

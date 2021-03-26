@@ -1,0 +1,40 @@
+# Author: Mark Goodrich
+# Description: Snapshot test on a parametic model with material
+# Last Revision: 3/9/2020
+settings:
+  name: SnapshotMaterial
+  description: "Snapshot test with Material" 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotMaterial.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: MCDFit
+- command: MCDDefineMaterial
+  input:
+    - name: "Purple"
+    - rgb:
+        r: 200
+        g: 40
+        b: 255
+        a: 100
+    - transparency: 0
+- command: MCDApplyMaterialToObjects
+  input:
+    - ids: [59]
+    - name: "Purple"
+    - model: "UtilityTestModel"
+
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: GetSnapshotTaken
+      expected: true

@@ -1,0 +1,36 @@
+# Author: Mark Goodrich
+# Revised: 11/26/2019
+# L1 test for 2D selection
+settings:
+  name: 2dSelect
+  description: "Selects a 2D object"
+  classname: L1
+  suite: Navigation
+  file: 2dSelect.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDSelect
+  input:
+  - 4321
+  - false
+  - mcdrange:   #need range
+    - 479.875244140625
+    - 1062.96923828125
+    - 0
+    - 678.2359008789062
+    - 1136.0872802734375
+    - 0
+  validation:
+    - command: getSelection
+      expected: [4321]

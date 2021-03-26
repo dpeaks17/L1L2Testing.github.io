@@ -1,0 +1,26 @@
+# EnableMeasurement test
+settings:
+  name: EnableMeasurement
+  description: "EnableMeasurement test"
+  classname: L1
+  suite: MeasurementTests
+  file: EnableMeasurement.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+# Test
+- command: ToggleMeasure
+  input:
+    - true
+  validation:
+    - command: GetMeasurePointPlacementMode
+      expected: true
+- command: ToggleMeasure
+  input:
+    - false # as one L1 test should not impact other L1 test with data persisted when running all in a session

@@ -1,0 +1,32 @@
+# Author: Supreethi Gande
+# Created on: 18-Jan-2021
+# L1 Test to select object using batchSelect and check isolate status
+settings:
+  name: ActivateIsolateUsingBatchSelect
+  description: "Select Object and check Isolate status"
+  classname: L1
+  suite: Isolate
+  file: ActivateIsolateUsingBatchSelect.yaml
+  exclusions:
+    - android
+    - desktop
+    - ios
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+    - model:
+        - UtilityTestModel
+        - https://argo.hexagonppm.com/graphicsamples/utility/
+        - parametrics
+        - file
+  # Select one object using BatchSelect
+  - command: MCDBatchSelect
+    input:
+      - select:
+          id: [59]
+    validation:
+      - command: GetIsolateEnabledStatus
+        expected: true
+      - command: GetSelection
+        expected: [59]

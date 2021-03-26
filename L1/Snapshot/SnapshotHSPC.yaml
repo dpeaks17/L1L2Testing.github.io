@@ -1,0 +1,42 @@
+# Author: Mark Goodrich
+# Description: Snapshot test on a HSPC model after fitting to an object
+# Last Revision: 3/9/2020
+settings:
+  name: SnapshotHSPC 
+  description: "Snapshot test on a HSPC model" 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotHSPC.yaml
+  exclusions:
+    - web
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - PointcloudTestModel
+      - https://argo.hexagonppm.com/graphicsamples/matterport/output/
+      - HSPC
+      - file
+- command: MCDSelect
+  input:
+    - 59
+    - false
+    - mcdrange:
+      - 2984.682373046875
+      - 2400.51904296875
+      - 70.21309661865234
+      - 2990.031005859375
+      - 2404.73974609375
+      - 73.31312561035156
+- command: MCDFit
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: getModels
+      input:
+        - filters:
+          - id
+      expected: {"models":[{"id":"PointcloudTestModel"}]}
+    - command: GetSnapshotTaken
+      expected: true

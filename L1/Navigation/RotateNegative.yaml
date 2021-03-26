@@ -1,0 +1,23 @@
+settings:
+  name: RotateNegative
+  description: "Tests out the motion rotate api call."
+  classname: L1
+  suite: Navigation
+  file: RotateNegative.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDRotate
+  input:
+    - -100
+    - -100
+    - false
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":3004.62,"y":2364.12,"z":70.93},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.04,"y":-0.54,"z":0.84}}}
+      precision: 2

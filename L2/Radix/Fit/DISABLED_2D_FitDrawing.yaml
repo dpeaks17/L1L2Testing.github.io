@@ -1,0 +1,43 @@
+# Author: Bryan Pugh
+# Revised: 05/12/2020
+# Tests to Fit Command for 2D Drawing
+settings:
+  name: 2D_FitDrawing
+  description: "Test Fit Command in 2D Drawing"
+  classname: FitTests
+  suite: Fit
+  file: 2D_FitDrawing.yaml
+  exclusions:
+    - web     # To be re-enabled during implementation of TR-PB-244685
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Move camera so we can fit after
+- command: MCDMove
+  input:
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+# Test Fit
+- command: MCDFit
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":370.4,"y":631,"z":0},"clip-far":5646.9,"clip-near":5425.4,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 1
+    tolerance: 0.5

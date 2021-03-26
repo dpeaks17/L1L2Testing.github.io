@@ -1,0 +1,25 @@
+settings:
+  name: Move
+  description: "Tests the move camera api function call."
+  classname: L1
+  suite: Navigation
+  file: Move.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDMove
+  input:
+    - 10
+    - 100
+    - 10
+    - 10
+    - 10
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2986.60,"y":2405.80,"z":77.60},"clip-far":200.00,"clip-near":10.67,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+      precision: 2

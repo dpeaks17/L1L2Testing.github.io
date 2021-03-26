@@ -1,0 +1,44 @@
+# UndoRedoNavigatorCompass test
+settings:
+  name: UndoRedoNavigatorCompass
+  description: Tests Undo and Redo of the Navigator Compass rotation
+  classname: UndoRedo
+  suite: UndoRedoTests
+  file: UndoRedoNavigatorCompass.yaml
+  exclusions:
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Test
+- command: ToggleNavigator
+  input: 
+    - true
+- command: MCDNavigatorCompass
+  input:
+   - 180
+- command: MCDFit # navigation to trigger camera update
+  validation:
+    - command: GetNavigatorBearing
+      expected: 180
+      precision: 2
+- command: MCDUndo
+  validation:
+    - command: GetNavigatorBearing
+      expected: 42.97
+      precision: 2
+- command: MCDRedo
+  validation:
+    - command: GetNavigatorBearing
+      expected: 180
+      precision: 2    
+- command: ToggleNavigator
+  input: 
+    - false 
+  

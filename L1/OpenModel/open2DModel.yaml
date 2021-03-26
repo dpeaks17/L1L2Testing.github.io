@@ -1,0 +1,29 @@
+# Author: Mark Goodrich
+# Revised: 11/27/2019
+# L1 test for 2D Model
+settings:
+  name: Open2DModel
+  description: "Tests opening of a HSPC pointcloud model with no filters given for the command input."
+  classname: Load2DModel
+  suite: Models
+  file: open2DModel.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+          - displayName
+      expected: {"models":[{"id":"2DTestDrawing","displayName":"2DTestDrawing"}]} 

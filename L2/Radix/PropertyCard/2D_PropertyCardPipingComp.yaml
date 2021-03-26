@@ -1,0 +1,40 @@
+# Author: Bryan Pugh
+# Revised: 6/26/2020
+# Test for testing property card (Hot Spotting) after selection of pipe component in 2D Drawing
+settings:
+  name: 2D_PropertyCardPipingComp
+  description: Verifies Piping Component property card displays in a 2D model. 
+  classname: PropertyCardTests
+  suite: Property Card
+  file: 2D_PropertyCardPipingComp.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - desktop
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Valve 1011-024
+- command: MCDSelect
+  input:
+  - 2820
+  - false
+  - mcdrange:
+    - 881.3363
+    - 983.1554
+    - 0
+    - 942.2312
+    - 1014.94
+    - 0
+  # Validate property card visibility
+  validation:
+      - command: GetPropertyCardStatus
+        expected: true #True indicates property card is visible after selection

@@ -1,0 +1,46 @@
+# Author: Brandon Hightower
+# Description: Verifies Escape works as a shortcut key
+# Last Revision: 8/13/2020
+settings:
+  name: 2D_EscapeWithShortcut
+  description: Verifies Escape works as a shortcut key
+  classname: Keyboard
+  suite: ShortCutKeys 
+  file: 2D_EscapeWithShortcut.yaml
+  exclusions: # keyboard is not usable on mobile
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select Object
+- command: MCDSelect
+  input:
+  - 3713
+  - false
+  - mcdrange:
+    - 477.893463
+    - 1058.837158
+    - 0.000000
+    - 680.033752
+    - 1135.734863
+    - 0.000000
+  validation:
+    - command: GetSelection
+      expected: [3713] 
+- command: MCDKey
+  input:
+  - ESCAPE
+  validation:
+    - command: GetSelection
+      expected: [] #Verify no object is currently selected

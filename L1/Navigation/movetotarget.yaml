@@ -1,0 +1,26 @@
+settings:
+  name: MoveToTarget
+  description: "Tests out the move to target api call."
+  classname: L1
+  suite: Navigation
+  file: MoveToTarget.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDMoveToTarget
+  input:
+    - 100 # eye x
+    - 100 # eye y
+    - 100 # eye z
+    - 3020.01 # target x
+    - 2399.99 # target y
+    - 70 # target z
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":3020.01,"y":2399.99,"z":70.00},"clip-far":3783.03,"clip-near":3610.56,"perspective":56.00,"up":{"x":-0.35,"y":0.46,"z":0.81}}}
+      precision: 2

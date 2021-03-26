@@ -1,0 +1,28 @@
+# Performs a ZoomArea (FitToBox) command on a Point Cloud (HSPC) Model
+settings:
+  name: ZoomAreaHSPC 
+  description: "Performs a ZoomArea (FitToBox) command on a Point Cloud (HSPC) Model"
+  classname: ZoomArea
+  suite: ZoomArea
+  file: ZoomAreaHSPC.yaml
+  exclusions:
+    - web
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - PointcloudTestModel
+      - https://argo.hexagonppm.com/graphicsamples/matterport/output/
+      - HSPC
+      - file
+- command: mcdfittobox
+  input:
+    - 208 # x1
+    - 168 # y1
+    - 373 # x2
+    - 252 # y2
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":62.21,"y":-14.07,"z":-6.98},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+    tolerance: 0.5

@@ -1,0 +1,67 @@
+# Author: Aniket Kavlekar
+# Created (DD-MM-YYYY): 06-05-2020
+# L1 test for change in camera projection setting during isolate
+settings:
+  name: IsolateAndProjection
+  description: "Sets camera projection within isolate to ensure its state"
+  classname: L1
+  suite: Isolate
+  file: IsolateAndProjection.yaml
+calls:
+  # 1. Load the utility area model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # 2. Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+    validation:
+      - command: GetSelection
+        expected: [59]
+      - command: GetIsolateEnabledStatus
+        expected: true
+  # 3. Isolate selected object
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+    validation:
+      - command: GetSelection
+        expected: []
+      - command: GetHiddenObjects
+        expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[59]}}
+  # 4. Set orthographic camera projection      
+  - command: MCDSetCameraProjection
+    input:
+      orthographic: true
+    validation:
+      - command: GetCameraProjection
+        expected: true
+  # 5. Stop Isolate command
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    validation:
+      - command: GetCameraProjection
+        expected: true
+  # 6. Set perspective camera projection      
+  - command: MCDSetCameraProjection
+    input:
+      orthographic: false
+    validation:
+      - command: GetCameraProjection
+        expected: false

@@ -1,0 +1,70 @@
+# Author: Supreethi Gande
+# Created on: 23-Jan-2020
+# Test for multiple objects, select one and exit from Isolate
+settings:
+  name: IsolateSelectAndExit
+  description: "Isolate multiple objects, select one among the isolate objects and exit."
+  classname: L1
+  suite: Isolate
+  file: IsolateSelectAndExit.yaml
+calls:
+  # Load a model
+  - command: GVCLoadModel
+    input:
+      - model:
+          - UtilityTestModel
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Select one object
+  - command: MCDSelect
+    input:
+      - 59
+      - true
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+  # Select another object
+  - command: MCDSelect
+    input:
+      - 35
+      - true
+      - mcdrange:
+          - 2980.16626
+          - 2398.155
+          - 70.165
+          - 2995.2395
+          - 2409.49878
+          - 70.3131256
+  # Isolate selected objects
+  - command: MCDStartCommand
+    input:
+      commandName: isolate
+  # Select any one of the isolate object
+  - command: MCDSelect
+    input:
+      - 59
+      - false
+      - mcdrange:
+          - 2984.682373046875
+          - 2400.51904296875
+          - 70.21309661865234
+          - 2990.031005859375
+          - 2404.73974609375
+          - 73.31312561035156
+  # Deactivate Isolate
+  - command: MCDStopCommand
+    input:
+      commandName: isolate
+      commandArgs:
+        immediate: false
+    validation:
+      # Validate by getting selected ids nd isolated ids
+      - command: GetSelection
+        expected: [35, 59]
+      - command: GetHiddenObjects
+        expected: { "UtilityTestModel": { "Hidden": [], "Isolated": [] } }

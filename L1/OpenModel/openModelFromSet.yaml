@@ -1,0 +1,56 @@
+# loads a model
+settings:
+  name: OpenModelFromSet
+  description: "Tests opening a model by setting a model list of one model."
+  classname: L1
+  suite: Models
+  file: OpenModelFromSet.yaml
+  exclusions: 
+    - android 
+    - web
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+      expected: {"models":[{"id":"UtilityTestModel"}]}
+- command: GVCSetModels #assigning multiple models should not open new model
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+    - model:
+      - RefiningTestModel
+      - https://argo.hexagonppm.com/graphicsamples/refining/
+      - parametrics
+      - file
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+      expected: {"models":[{"id":"UtilityTestModel"}]}
+- command: GVCSetModels #assigning single model to test that it opens
+  input:
+    - model:
+      - RefiningTestModel
+      - https://argo.hexagonppm.com/graphicsamples/refining/
+      - parametrics
+      - file
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+      expected: {"models":[{"id":"RefiningTestModel"}]}

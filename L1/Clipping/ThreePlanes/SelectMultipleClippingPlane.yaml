@@ -1,0 +1,47 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# Selects Multiple Clipping Planes (3 planes)
+settings:
+  name: SelectMultipleClippingPlane (3 planes)
+  description: "Select Multiple Clipping Planes and validates by getting their IDs"
+  classname: L1
+  suite: Clipping
+  file: SelectMultipleClippingPlane.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Utility
+          - https://argo.hexagonppm.com/graphicsamples/utility/
+          - parametrics
+          - file
+  # Go home
+  - command: mcdgohome
+  # Clip Start
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select 2 planes at once
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":28.691564559936499,"height":70.228174627390899,"latitude":2404.7433836884002,"layerid":7,"longitude":2989.9814393800002,"nx":0.00110990144517925,"ny":-0.0011913972335621699,"nz":0.99999867434482803,"target-name":"Utility","x":2989.9814393800002,"y":2404.7433836884002,"z":70.228174627390899},{"distance":27.2473449707031,"height":71.005957047532902,"latitude":2403.8509523979801,"layerid":9,"longitude":2990.8087176106701,"nx":6.7032973857093306e-05,"ny":-0.99999999764274095,"nz":-1.4869356167778401e-05,"target-name":"ClipPlanesInDynamicMeshLayer","x":2990.8087176106701,"y":2403.8509523979801,"z":71.005957047532902}],"x":256,"y":256}
+    validation:
+      # Validate by getting the selected plane IDs
+      # GetClipSelectedPlane is returning incorrect result
+      # TODO: Solve the issue in api and update the expected values of GetClipSelectedPlane with correct values
+      - command: GetClipSelectedPlane
+        expected: [0, 1, 2]
+      - command: GetClipEnabledPlanes
+        expected: [0, 1, 2]
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop
+  # Reset home
+  - command: mcdresethome

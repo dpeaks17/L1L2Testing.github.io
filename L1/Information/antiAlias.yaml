@@ -1,0 +1,22 @@
+# Author: Dayakar Arumbaka
+# Created: 02-Feb-2020
+# L1 test for Anti alias information
+settings:
+  name: AntiAlias
+  description: "Test Anti alias returned system information is valid"
+  classname: L1
+  suite: Information
+  file: antiAlias.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+  validation:
+    - command: getSystemInformation
+      input:
+        AntiAlias
+      expected: {"AntiAlias":true}

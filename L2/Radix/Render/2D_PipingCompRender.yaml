@@ -1,0 +1,38 @@
+# Author: Justin Ikerman
+# Revised: 4/24/2020
+# Tests selection of a pipe component to see if it has rendered in 2D Drawing
+settings:
+  name: 2D_PipingCompRender
+  description: Verifies Piping Components immediately display in a 2D model. 
+  classname: Render
+  suite: L2_Radix
+  file: 2D_PipingCompRender.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Valve 1011-024
+- command: MCDSelect
+  input:
+  - 2820
+  - false
+  - mcdrange:
+    - 881.3363
+    - 983.1554
+    - 0
+    - 942.2312
+    - 1014.94
+    - 0
+  validation:
+    - command: getSelection
+      expected: [2820]  # Expected ID
+      precision: 1

@@ -1,0 +1,63 @@
+# Tests Reset Home Command with center locked
+settings:
+  name: HomeCenterLocked
+  description: "Tests Reset Home Command with center locked "
+  classname: L1
+  suite: HomeTests
+  file: HomeCenterLocked.yaml
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDFit
+# Navigate somewhere
+- command: MCDMove
+  input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100
+# lock center
+- command: mcdsetlocks
+  input:
+  - locks:
+      off: # disable locks
+      - pitch
+      - yaw
+      - elevation
+      on: # enable locks
+      - center
+# Set home
+# Navigate somewhere else
+- command: MCDMove
+  input:
+    - -287
+    - -10
+    - 10
+    - 100
+    - 100
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2985.52,"y":2401.18,"z":73.48},"clip-far":200.00,"clip-near":0.1,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2  
+# Test Reset Home command
+- command: MCDResetHome
+  validation:
+  - command: GetHomePosition
+    expected: {"CameraHomePosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2    
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2985.52,"y":2401.18,"z":73.48},"clip-far":200.00,"clip-near":0.1,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2
+# Test Home command
+- command: MCDGOHome
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+    precision: 2

@@ -1,0 +1,24 @@
+# loads a HSPC model
+settings:
+  name: OpenModelHSPConly
+  description: "Tests opening of a HSPC pointcloud model with no filters given for the command input."
+  classname: L1
+  suite: Models
+  file: openModeHSPCOnly.yaml
+  exclusions:
+    - web
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - Matterport
+      - https://argo.hexagonppm.com/graphicsamples/matterport/output/
+      - HSPC
+      - file
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - id
+          - displayName
+      expected: {"models":[{"id":"Matterport","displayName":"Matterport"}]} #How to find this?

@@ -1,0 +1,26 @@
+# Viewaxis enable test
+settings:
+  name: ViewAxisEnable
+  description: "Viewaxis enable test"
+  classname: L1
+  suite: ViewAxisTests
+  file: ViewAxisEnable.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+# Test
+- command: ToggleDisplayAxis
+  input:
+    - true
+  validation:
+    - command: GetDisplayAxisVisibility
+      expected: true
+- command: ToggleDisplayAxis
+  input:
+    - false #switching off the displat axis to make sure it doesnt impact the results of other tests

@@ -1,0 +1,22 @@
+# Author: Mark Goodrich
+# Revised: 11/20/2019
+# L1 test for fit to model
+settings:
+  name: FitToModel
+  description: "Fits to the entire range of the model"
+  classname: L1
+  suite: Navigation
+  file: FitToModel.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2990.76,"y":2403.82,"z":70.93},"clip-far":200.00,"clip-near":15.01,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+      precision: 2

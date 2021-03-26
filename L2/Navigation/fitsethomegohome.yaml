@@ -1,0 +1,41 @@
+# Tests sethome/home after fit is used
+settings:
+  name: FitSetHomeGoHome
+  description: "Tests out the reset home functionality after fitting to a selected object."
+  classname: SetHome
+  suite: CameraTests
+  file: fitsethomegohome.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - RefiningTestModel
+      - https://argo.hexagonppm.com/graphicsamples/refining/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+  - 282
+  - false
+  - mcdrange:
+    - 3045.99121
+    - 2375.418
+    - 77.77323
+    - 3051.59131
+    - 2377.618
+    - 80.37323
+  validation:
+    - command: getSelection
+      expected: [282]
+      precision: 2
+- command: MCDFit
+  validation:
+    - command: getCameraPosition
+      expected: {CameraPosition : {center : {x : 3048.791259765625,y : 2376.51806640625,z : 79.073226928710938},clip-far : 200.0,clip-near : 0.10000000149011612,perspective : 56.0,up : {x : -0.36829099059104919,y : 0.39533323049545288,z : 0.84147107601165771}}}
+      precision: 2
+- command: MCDSetHome
+- command: MCDGoHome
+  validation:
+  - command: getCameraPosition
+    expected: {CameraPosition : {center : {x : 3048.791259765625,y : 2376.51806640625,z : 79.073226928710938},clip-far : 200.0,clip-near : 0.10000000149011612,perspective : 56.0,up : {x : -0.36829099059104919,y : 0.39533323049545288,z : 0.84147107601165771}}}
+    precision: 2

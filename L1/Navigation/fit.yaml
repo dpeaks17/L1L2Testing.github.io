@@ -1,0 +1,36 @@
+# Author: Derek Brown
+# Revised: 11/7/2019
+# L1 test for fit
+settings:
+  name: Fit
+  description: "Selects an object, then fits to it."
+  classname: L1
+  suite: Navigation
+  file: Fit.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+  validation:
+    - command: getSelection
+      expected: [59]
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2987.36,"y":2402.63,"z":71.76},"clip-far":200.00,"clip-near":0.10,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
+      precision: 2

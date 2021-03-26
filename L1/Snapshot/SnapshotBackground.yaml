@@ -1,0 +1,46 @@
+# Author: Mark Goodrich
+# Description: Snapshot test on a parametic model with Background enabled
+# Last Revision: 3/9/2020
+settings:
+  name: SnapshotBackground
+  description: "Snapshot test with Background" 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotBackground.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+      - configuration:
+          BackgroundColor: [.4,.2,.4,1]
+
+
+
+- command: MCDSelect
+  input:
+    - 59
+    - false
+    - mcdrange:
+      - 2984.682373046875
+      - 2400.51904296875
+      - 70.21309661865234
+      - 2990.031005859375
+      - 2404.73974609375
+      - 73.31312561035156
+- command: MCDFit
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: GetSnapshotTaken
+      expected: true
+    - command: getModels
+      input: 
+        - filters:
+          - backgroundColor
+      expected: {"models":[{"backgroundColor":{"_glmath":{},"_red":0.4, "_green":0.2, "_blue":0.4, "_alpha":1}}]}
+    

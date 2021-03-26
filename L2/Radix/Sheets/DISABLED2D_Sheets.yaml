@@ -1,0 +1,76 @@
+# Author: Dasu Yamala
+# Revised: 03-Aug-2020
+# Tests sheets for selection of objects and camera positions in 2D drawing
+settings:
+  name: 2D_Sheets.yaml
+  description: verifies the selection of objects and camera positions when we navigate between sheets.
+  classname: L2
+  suite: Sheets
+  file: 2D_Sheets.yaml
+  exclusions:
+    - android
+    - ios
+    - desktop
+    - web
+calls:
+  # Load 2D Drawing
+  - command: GVCLoadModel
+    input:
+      - model:
+        - 2DTestDrawing
+        - https://hexlive19-radix.hexagonppm.com/2DWebAPI/V1/Projects('ProjectC')/Drawings('BASF_SSK_PID_MultipleSheets.igr')/
+        - Edges
+        - web-api
+        - configuration:
+            CameraHeading: top
+            CameraProjection: orthographic
+            CameraLocks: [pitch, yaw]
+            BackgroundColor: [1,1,1,1]
+  # Select the object
+  - command: MCDSelect
+    input:
+    - 3876
+    - false
+    - mcdrange:
+      - 1047.77795
+      - -1018.073120
+      - 0
+      - 1042.7322998046875
+      - -1026.5650634765625
+      - 0
+    validation:
+      # Validates the selected objects and camera positions in current sheet.
+      - command: GetSelection
+        expected: [3876]  # Expected ID
+        precision: 1
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":1103.89,"y":-632.62,"z":0.00},"clip-far":1757.34,"clip-near":1688.43,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+        precision: 2
+      - command: GetHomePosition
+        expected: {"CameraHomePosition":{"center":{"x":1103.89,"y":-632.62,"z":0.00},"clip-far":1757.34,"clip-near":1688.43,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+        precision: 2
+  # Navigate somewhere
+  - command: MCDMove
+    input:
+    - 187
+    - 10
+    - 10
+    - 100
+    - 100      
+  # Test setactivesheet command      
+  - command: MCDSetActiveSheet
+    input:
+    - sheetName : "Project8"
+    validation:
+      # Validates the selected objects and camera positions after navigating to another sheet.
+      - command: GetActiveSheet
+        expected: "Project8"
+      - command: GetSelection
+        expected: []  # Expected ID
+        precision: 1
+      - command: GetCameraPosition
+        expected: {"CameraPosition":{"center":{"x":1671.56,"y":-495.34,"z":0.00},"clip-far":1437.82,"clip-near":1381.44,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+        precision: 2
+      - command: GetHomePosition
+        expected: {"CameraHomePosition":{"center":{"x":1103.89,"y":-632.62,"z":0.00},"clip-far":1757.34,"clip-near":1688.43,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+        precision: 2

@@ -1,0 +1,44 @@
+# Author: Bryan Pugh
+# Revised: 6/29/2020
+# Tests the Fit command after selection of a Pipe in 2D Drawing
+settings:
+  name: 2D_PipeFit
+  description: Verifies selected pipe is Fit to the view in a 2D model
+  classname: 2DFitTests
+  suite: Fit
+  file: 2D_PipeFit.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the pipe run 1011-O-5225-65-6CB2B01
+- command: MCDSelect
+  input:
+  - 5600
+  - false
+  - mcdrange:
+    - -2262.58057
+    - 128.636383
+    - 0
+    - 500.647461
+    - 131.310547
+    - 0
+# Test Fit
+- command: MCDFit
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":-880.97,"y":129.97,"z":0.00},"clip-far":2650.41,"clip-near":2546.47,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+    precision: 2

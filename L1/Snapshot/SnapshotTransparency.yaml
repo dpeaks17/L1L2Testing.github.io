@@ -1,0 +1,40 @@
+# Author: Mark Goodrich
+# Description: Snapshot test on a parametic model with transparency
+# Last Revision: 3/9/2020
+settings:
+  name: SnapshotTransparency
+  description: "Snapshot test with Transparency" 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotTransparency.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: MCDFit
+- command: MCDDefineMaterial
+  input:
+    - name: "Transparent"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: 1
+- command: MCDApplyMaterialToObjects
+  input:
+    - ids: [59]
+    - name: "Transparent"
+    - model: "UtilityTestModel"
+
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: GetSnapshotTaken
+      expected: true

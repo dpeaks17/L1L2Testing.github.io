@@ -1,0 +1,25 @@
+settings:
+  name: MoveNegative
+  description: "Tests the move camera api function call with negative values."
+  classname: L1
+  suite: Navigation
+  file: MoveNavigation.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDMove
+  input:
+    - -10
+    - -100
+    - -10
+    - 10
+    - 10
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2994.92,"y":2401.84,"z":64.26},"clip-far":200,"clip-near":19.35,"perspective":56,"up":{"x":-0.37,"y":0.4,"z":0.84}}}
+      precision: 2

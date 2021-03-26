@@ -1,0 +1,76 @@
+# Author: Brandon Hightower
+# Description: Verifies move shortcuts work on 2D drawings
+# Last Revision: 8/14/2020
+settings:
+  name: 2D_MoveWithShortcuts
+  description: Verifies move shortcuts work on 2D drawings
+  classname: ShortcutKeys
+  suite: ShortCutKeys 
+  file: 2D_MoveWithShortcuts.yaml
+  exclusions: # keyboard is not usable on mobile
+    - web       # To be re-enabled during implementation of TR-PB-244685
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDKey
+  input:
+  - W # Zoom in
+  validation:
+    - command: GetCameraDirectionChanged
+      input: 
+        - prior: {"CameraPosition":{"center":{"x":366.08,"y":636.24,"z":0.00},"clip-far":5638.35,"clip-near":5417.24,"perspective":56.0000,"up":{"x":0.00,"y":1.0,"z":0.00}}}
+        - tolerance: .01
+      # verify zoomed in
+      expected: {"xpos":true,"xneg":false,"ypos":false,"yneg":true,"zpos":false,"zneg":false,"clipnear":true,"clipfar":true} 
+- command: MCDKey
+  input:
+  - H # return home
+- command: MCDKey
+  input:
+  - A # Pan left
+  validation:
+    - command: GetCameraDirectionChanged
+      input: 
+        - prior: {"CameraPosition":{"center":{"x":366.08,"y":632.05,"z":0.00},"clip-far":5833.99,"clip-near":5605.21,"perspective":56.0000,"up":{"x":0.00,"y":1.0,"z":0.00}}}
+        - tolerance: .01
+      # verify panned Left
+      expected: {"xpos":true,"xneg":false,"ypos":false,"yneg":true,"zpos":false,"zneg":false,"clipnear":true,"clipfar":true} 
+- command: MCDKey
+  input:
+  - H # return home
+- command: MCDKey
+  input:
+  - D # Pan Right
+  validation: 
+    - command: GetCameraDirectionChanged
+      input: 
+        - prior: {"CameraPosition":{"center":{"x":366.08,"y":632.05,"z":0.00},"clip-far":5833.99,"clip-near":5605.21,"perspective":56.0000,"up":{"x":0.00,"y":1.0,"z":0.00}}}
+        - tolerance: .01
+      # verify panned Right
+      expected: {"xpos":true,"xneg":false,"ypos":false,"yneg":true,"zpos":false,"zneg":false,"clipnear":true,"clipfar":true} 
+- command: MCDKey
+  input:
+  - H # return home
+- command: MCDKey
+  input:
+  - S # Zoom Out
+  validation:
+    - command: GetCameraDirectionChanged
+      input: 
+        - prior: {"CameraPosition":{"center":{"x":366.08,"y":632.05,"z":0.00},"clip-far":5833.99,"clip-near":5605.21,"perspective":56.0000,"up":{"x":0.00,"y":1.0,"z":0.00}}}
+        - tolerance: .01
+      # verify zoomed out
+      expected: {"xpos":true,"xneg":false,"ypos":false,"yneg":true,"zpos":false,"zneg":false,"clipnear":true,"clipfar":true} 

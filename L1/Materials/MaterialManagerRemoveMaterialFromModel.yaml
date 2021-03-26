@@ -1,0 +1,30 @@
+settings:
+  name: MaterialManagerRemoveMaterialFromModel
+  description: "Applies a material to a model, then tests the removal api call."
+  classname: L1
+  suite: Materials
+  file: MaterialManagerRemoveMaterialFromModel.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "MaterialName"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: .75
+- command: MCDApplyMaterialToModel
+  input:
+    - name: "MaterialName"
+- command: MCDRemoveMaterialFromModel
+  input:
+    - name: "MaterialName"
+# TODO: validate that the model has no applied material to any of the objects.

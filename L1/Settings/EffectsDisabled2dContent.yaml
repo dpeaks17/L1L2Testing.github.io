@@ -1,0 +1,56 @@
+# Author: Joshua Stankiewicz
+# Revised: 09/02/2020
+# L1 test for 2D Model settings
+settings:
+  name: EffectsDisabled2dContent
+  description: "Tests that visual settings are disabled when no 3d content is present."
+  classname: L1
+  suite: Settings
+  file: EffectsDisabled2dContent.yaml
+  exclusions:
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+  validation:
+  - command: getvisualsettingsenabled
+    input: 
+      - "Outline"
+    expected: false
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "AmbientOcclusion"
+    expected: false
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "Anti-Aliasing"
+    expected: false
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "DisplayAxis"
+    expected: false
+
+  - command: getvisualsettingsenabled
+    input: 
+      - "Navigator"
+    expected: false
+
+  # some commands are still enabled in 2d
+  - command: getvisualsettingsenabled
+    input: 
+      - "GradientBackground"
+    expected: true

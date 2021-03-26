@@ -1,0 +1,43 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# L1 test for Deleting Multiple Clipping Planes (3 planes)
+settings:
+  name: HideMultipleClippingPlanes (3 planes)
+  description: "Hide or Delete Multiple Clipping Planes"
+  classname: L1
+  suite: Clipping
+  file: HideMultipleClippingPlanes.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select 2 Clipping planes
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":72.78089904785156,"height":77.52152854932845,"latitude":2387.7638846583227,"layerid":10,"longitude":3066.1376503225297,"nx":0.18368262817980865,"ny":-0.1971700886751473,"nz":0.9630081246992639,"target-name":"ClipPlanesInDynamicMeshLayer","x":3066.1376503225297,"y":2387.7638846583227,"z":77.52152854932845}],"x":1254,"y":634}
+   # Hide/Delete the Selected planes
+  - command: MCDClipHidePlane
+    input:
+      planeId: [0,2]
+    validation:
+      # Validates by comapring the IDs of the remaining visible planes
+      - command: GetClipEnabledPlanes
+        expected: [1]
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

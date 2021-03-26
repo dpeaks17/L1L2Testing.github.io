@@ -1,0 +1,34 @@
+# Author: Derek Brown (derek.brown@hexagon.com)
+# Description: Snapshot test on a parametric model
+# Last Revision: 1/31/2020
+settings:
+  name: SnapshotParametrics 
+  description: "Snapshot test on a parametric model" 
+  classname: L1 
+  suite: Snapshot
+  file: SnapshotParametrics.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+    - 59
+    - false
+    - mcdrange:
+      - 2984.682373046875
+      - 2400.51904296875
+      - 70.21309661865234
+      - 2990.031005859375
+      - 2404.73974609375
+      - 73.31312561035156
+- command: MCDStartCommand
+  input:
+    commandName: snapshot
+  validation: 
+    - command: GetSnapshotTaken
+      expected: true

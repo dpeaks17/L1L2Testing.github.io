@@ -1,0 +1,43 @@
+settings:
+  name: MaterialManagerApplyMaterialToOjbects
+  description: "Tests applying materials to a group of objects by id."
+  classname: L1
+  suite: Materials
+  file: MaterialManagerApplyMaterialToOjbects.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDDefineMaterial
+  input:
+    - name: "MaterialName"
+    - rgb:
+        r: 255
+        g: 0
+        b: 0
+        a: 100
+    - transparency: .75
+- command: MCDDefineMaterial
+  input:
+    - name: "MaterialName2"
+    - rgb:
+        r: 255
+        g: 255
+        b: 0
+        a: 100
+    - transparency: .5
+- command: MCDApplyMaterialToObjects
+  input:
+    - ids: [59,35]
+    - name: "MaterialName"
+    - model: "UtilityTestModel"
+- command: MCDApplyMaterialToObjects
+  input:
+    - ids: [58,35] # notice 35 is in both, but it will take only this material.
+    - name: "MaterialName2"
+    - model: "UtilityTestModel"
+#TODO validate that the materials have been applied.

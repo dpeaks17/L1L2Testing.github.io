@@ -1,0 +1,40 @@
+# Author: Bryan Pugh
+# Revised: 6/29/2020
+# Test for testing property card (Hot Spotting) after selection of signal run in 2D Drawing
+settings:
+  name: 2D_PropertyCardSignalRun
+  description: Verifies signal run property card displays in a 2D model. 
+  classname: PropertyCardTests
+  suite: Property Card
+  file: 2D_PropertyCardSignalRun.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - desktop
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Signal Line AI
+- command: MCDSelect
+  input:
+  - 629
+  - false
+  - mcdrange:
+    - -958.262268
+    - 874.755066
+    - 0
+    - -750.224976
+    - 927.336121
+    - 0
+  # Validate property card visibility
+  validation:
+      - command: GetPropertyCardStatus
+        expected: true #True indicates property card is visible after selection

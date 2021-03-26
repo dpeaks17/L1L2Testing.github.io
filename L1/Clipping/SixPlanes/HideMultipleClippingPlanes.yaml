@@ -1,0 +1,54 @@
+# Author: Abhinav Awasthi
+# Created: 03-Jan-2020
+# L1 test for Deleting Multiple Clipping Planes (6 planes)
+settings:
+  name: HideMultipleClippingPlanes (6 planes)
+  description: "Hide or Delete Multiple Clipping Planes"
+  classname: L1
+  suite: Clipping
+  file: HideMultipleClippingPlanes.yaml
+calls:
+  - command: GVCLoadModel
+    input:
+      - model:
+          - Refining
+          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - parametrics
+          - file
+          - configuration:
+              Selections:
+                - select:
+                    id: 282
+                    mcdrange:
+                      - 3045.99121
+                      - 2375.418
+                      - 77.77323
+                      - 3051.59131
+                      - 2377.618
+                      - 80.37323
+  # Start Clip
+  - command: MCDClipStart
+    input:
+      range:
+        min:
+          x: 3009.697998046875
+          y: 2357.08984375
+          z: 66.91000366210938
+        max:
+          x: 3061.9326171875
+          y: 2418.5
+          z: 88.08931732177734
+  # Select 3 Clipping planes        
+  - command: MCDClipLocatePlane
+    input:
+      locateString: {"action":"depthClicked","hits":[{"distance":4.898129463195801,"height":79.8046656160439,"latitude":2375.9120358251475,"layerid":8,"longitude":3051.416360310469,"nx":0.8819625766182438,"ny":-0.35938891102676074,"nz":0.3049288836366723,"target-name":"Refining","x":3051.416360310469,"y":2375.9120358251475,"z":79.8046656160439},{"distance":4.246453762054443,"height":80.2030741626057,"latitude":2375.427465417816,"layerid":10,"longitude":3051.5928353868126,"nx":0.9999998159211378,"ny":-0.00010947698647142261,"nz":0.0005968018763400408,"target-name":"ClipPlanesInDynamicMeshLayer","x":3051.5928353868126,"y":2375.427465417816,"z":80.2030741626057}],"x":1257,"y":602}
+  # Hide/Delete the Selected planes
+  - command: MCDClipHidePlane
+    input:
+      planeId: [0, 4, 5]
+    validation:   
+      # Validates by comapring the IDs of the remaining visible planes  
+      - command: GetClipEnabledPlanes
+        expected: [1, 2, 3]
+  # Stop/Deactivate Clip before going to next testcase
+  - command: MCDClipStop

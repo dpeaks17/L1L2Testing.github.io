@@ -1,0 +1,40 @@
+# Author: Justin Ikerman
+# Revised: 4/24/2020
+# Tests selection of instrument to see if it has rendered in 2D Drawing
+settings:
+  name: 2D_InstrumentRender
+  description: Verifies instruments immediately display in a 2D model. 
+  classname: Render
+  suite: L2_Radix
+  file: 2D_InstrumentRender.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of Id map changes in gvc-react(TR-PB-245747).
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Instrument: YZS 0002
+- command: MCDSelect
+  input:
+  - 3735
+  - false
+  - mcdrange:
+    - -1010.1864
+    - 1725.47119
+    - 0
+    - -911.7767
+    - 1823.881
+    - 0
+  validation:
+    - command: getSelection
+      expected: [3735]  # Expected ID
+      precision: 1

@@ -1,0 +1,58 @@
+# NavigatorWalkWith2D test
+settings:
+  name: NavigatorWalkWith2D
+  description: NavigatorWalkWith2D test
+  classname: Navigator Workflow
+  suite: Navigator
+  file: NavigatorWalkWith2D.yaml
+  exclusions:
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Test
+# Toggle Navigator ON
+- command: ToggleNavigator
+  input: 
+    - true
+# Select object
+- command: MCDSelect
+  input:
+  - 44
+  - false
+  - mcdrange:
+    - 2988.73315
+    - 2401.61768
+    - 73.1131
+    - 2989.011
+    - 2401.894
+    - 73.5631
+# Fit to object
+- command: MCDFit
+# Activate 2D command
+- command: MCDNavigator2d
+# Activate Walk View command
+- command: MCDNavigatorWalk
+  validation: #Verify that camera state is locked
+    - command: getCameraState
+      input: 
+        - isElevationLocked
+      expected: true
+- command: ToggleNavigator
+  input: 
+    - false
+# Validate the position 
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2988.87,"y":2401.76,"z":73.34},"clip-far":200,"clip-near":0.1,"perspective":56,"up":{"x":0.0,"y":-0.0,"z":1.0}}}
+      precision: 2
+# Toggle Navigator ON
+- command: ToggleNavigator
+  input: 
+    - false

@@ -1,0 +1,63 @@
+# Author: Bryan Pugh
+# Revised: 7/20/2020
+# Tests the Fit command after selecting multiple objects in a 2D Drawing
+settings:
+  name: 2D_FitToMultiple
+  description: Fit to Multiple 2D Objects test
+  classname: 2DFitTests
+  suite: Fit
+  file: 2D_FitToMultiple.yaml
+  exclusions:
+    - web
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Nozzle N2 for Vessel
+- command: MCDSelect
+  input:
+  - 4766
+  - false
+  - mcdrange:
+    - 2553.005859
+    - 825.905396
+    - 0
+    - 2616.790527
+    - 879.986511
+    - 0
+  validation:
+    - command: GetSelection
+      expected: [4766]
+      precision: 2
+# Select the Pump 1011-MP-5004
+- command: MCDSelect
+  input:
+  - 4729
+  - true
+  - mcdrange:
+    - 2197.172363
+    - 310.720612
+    - 0
+    - 2348.288086
+    - 461.438446
+    - 0
+  validation:
+    - command: getSelection
+      expected: [4729,4766]
+# Test fit of selected objects
+- command: MCDFit
+  validation:
+    - command: getCameraPosition
+      expected: {"CameraPosition":{"center":{"x":2406.98,"y":595.35,"z":0.00},"clip-far":546.02,"clip-near":524.61,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+      precision: 2

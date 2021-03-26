@@ -1,0 +1,45 @@
+# Author: Bryan Pugh
+# Revised: 7/01/2020
+# Test for testing Home command after selection of signal line in 2D Drawing
+settings:
+  name: 2D_SignalLineHome
+  description: Verifies Home command works after selection of a signal line in a 2D model
+  classname: HomeTests
+  suite: Feature Home
+  file: 2D_SignalLineHome.yaml
+  exclusions:
+    - web       # To be re-enabled during implementation of TR-PB-244685
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the Signal Line AI
+- command: MCDSelect
+  input:
+  - 629
+  - false
+  - mcdrange:
+    - -958.262268
+    - 874.755066
+    - 0
+    - -750.224976
+    - 927.336121
+    - 0
+# Test home command
+- command: MCDGoHome
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":378.2,"y":630.92,"z":0},"clip-far":5661.84,"clip-near":5439.8,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+    precision: 2

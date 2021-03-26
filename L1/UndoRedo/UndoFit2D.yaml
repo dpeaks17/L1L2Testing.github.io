@@ -1,0 +1,44 @@
+# Tests UndoRedo Fit in 2D
+settings:
+  name: UndoFit2D
+  description: "Undo Fit in 2D"
+  classname: Undo
+  suite: UndoRedoTests
+  file: UndoFit2D.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of Id map changes in gvc-react.
+calls:
+# Setup section
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Move camera so we can fit after
+- command: MCDMove
+  input:
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+    - 1000
+# Test
+- command: MCDFit
+  validation:
+    - command: GetCameraPosition
+      expected: {"CameraPosition":{"center":{"x":3212.81,"y":2269.35,"z":0},"clip-far":6091.12,"clip-near":5852.25,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+      precision: 2
+      tolerance: .5
+# Test
+- command: MCDUndo
+  validation:
+  - command: GetCameraPosition
+    expected: {"CameraPosition":{"center":{"x":3212.81,"y":2269.35,"z":0},"clip-far":6091.12,"clip-near":5852.25,"perspective":56.00,"up":{"x":0,"y":1,"z":0}}}
+    precision: 2

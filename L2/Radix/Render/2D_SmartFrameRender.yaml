@@ -1,0 +1,40 @@
+# Author: Justin Ikerman
+# Revised: 4/24/2020
+# Tests selection of smart frame to see if it has rendered in 2D Drawing
+settings:
+  name: 2D_SmartFrameRender
+  description: Verifies Smartframes (borders/logos) are immediately displayed in a 2D model. 
+  classname: Render
+  suite: L2_Radix
+  file: 2D_SmartFrameRender.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - web   # To be re-enabled during implementation of Id map changes in gvc-react(TR-PB-245747).
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the SmartFrame to verify it renders
+- command: MCDSelect
+  input:
+  - 1158
+  - false
+  - mcdrange:
+    - -2921.87
+    - -1623.04
+    - 0
+    - 3505.38
+    - 2916.997
+    - 0
+  validation:
+    - command: getSelection
+      expected: [1158]  # Expected ID
+      precision: 1

@@ -1,0 +1,35 @@
+# Author: Curt Werline
+# Revised: 2/10/2020 by Andy Sutton
+# L1 test for common view (Top) without a target
+settings:
+  name: CommonViewTop
+  description: "Sets and gets the Top common view without a target."
+  classname: L1
+  suite: CommonViews
+  file: CommonViewTop.yaml
+  exclusions:
+    - android
+    - web
+    - ios
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+# Start common views command
+- command: MCDCommonViewsStart
+# Set the Top common view (no target)
+- command: SetCommonView
+  input:
+    view: Top
+    target: false
+# Validate that the common view is set to Top
+  validation:
+    - command: GetCommonView
+      expected: Top
+# Stop/Deactivate common views before going to next test case
+- command: MCDCommonViewsStop

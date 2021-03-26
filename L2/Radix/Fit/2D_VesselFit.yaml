@@ -1,0 +1,44 @@
+# Author: Bryan Pugh
+# Revised: 6/29/2020
+# Tests the Fit command after selection of a Vessel in 2D Drawing
+settings:
+  name: 2D_VesselFit
+  description: Verifies selected vessel is Fit to the view in a 2D model
+  classname: 2DFitTests
+  suite: Fit
+  file: 2D_VesselFit.yaml
+  exclusions:
+    - web
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+# Select the central Vessel 1011-VES-301
+- command: MCDSelect
+  input:
+  - 3230
+  - false
+  - mcdrange:
+    - 415.570862
+    - 481.44928
+    - 0
+    - 728.7554
+    - 1551.54077
+    - 0
+# Test Fit
+- command: MCDFit
+  validation:
+  - command: getCameraPosition
+    expected: {"CameraPosition":{"center":{"x":572.16,"y":1016.49,"z":0.00},"clip-far":1026.40,"clip-near":986.15,"perspective":56.00,"up":{"x":0.00,"y":1.00,"z":0.00}}}
+    precision: 2

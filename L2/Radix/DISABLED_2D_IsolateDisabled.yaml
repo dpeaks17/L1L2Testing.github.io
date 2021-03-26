@@ -1,0 +1,60 @@
+# Author: Brandon Hightower
+# Description: Check if Isolate can be disabled
+# Last Revision: 8/18/2020
+settings:
+  name: 2D_IsolateDisabled
+  description: Verify isolate disable works properly
+  classname: Isolate
+  suite: L2_Radix 
+  file: 2D_IsolateDisabled.yaml
+  exclusions:
+    - web
+    - android
+    - ios
+    - desktop # To be re-enabled during implementation of TR-PB-244685
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+  validation:
+    - command: GetHomePosition
+      expected: {"camerahomeposition":{"center":{"x":370.41,"y":630.92,"z":0},"clip-far":5646.9,"clip-near":5425.45,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+      precision: 2
+- command: MCDSelect
+  input:
+  - 4363
+  - false
+  - mcdrange:
+    - 443.449677
+    - 974.662109
+    - 0.000000
+    - 491.888763
+    - 1026.937988
+    - 0.000000
+# Isolate selected objects
+- command: MCDStartCommand
+  input:
+    commandName: isolate
+# Deactivate Isolate
+- command: MCDStopCommand
+  input:
+    commandName: isolate
+    commandArgs:
+      immediate: false
+  # Validate by getting camera position and isolated object ids
+  validation:
+    - command: GetHomePosition
+      expected: {"camerahomeposition":{"center":{"x":370.41,"y":630.92,"z":0},"clip-far":5646.9,"clip-near":5425.45,"perspective":56,"up":{"x":0,"y":1,"z":0}}}
+      precision: 2
+    # if used, causes TypeError: Cannot read property 'toString' of null
+    #- command: GetHiddenObjects
+    #  expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[]}}

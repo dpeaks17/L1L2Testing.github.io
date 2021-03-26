@@ -1,0 +1,26 @@
+# Author: Derek Brown (derek.brown@hexagon.com)
+# Description: Perform an isolate on multiple using the show/hide api.
+# Last Revision: 1/14/2020
+settings:
+  name: IsolateMultipleObjects
+  description: "Perform an isolate on multiple objects."
+  classname: L1 
+  suite: ShowHide 
+  file: IsolateMultipleObjects.yaml 
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDShow # hide all except 53
+  input:
+    - objects:
+      - 53
+      - 59
+    - true
+  validation:
+    - command: GetHiddenObjects
+      expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[53, 59]}}

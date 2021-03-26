@@ -1,0 +1,40 @@
+# Author: Mark Goodrich
+# Revised: 11/20/2019
+# L2 test for basic isolate (select, fit, hide)
+settings:
+  name: MockIsolate
+  description: "Selects an object, then fits to it."
+  classname: L1
+  suite: Isolate
+  file: MockIsolate.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDSelect
+  input:
+    - 59
+    - true
+    - mcdrange: # the optional range (evidentally not so optional) 
+      - 2984.682373046875
+      - 2400.51904296875
+      - 70.21309661865234
+      - 2990.031005859375
+      - 2404.73974609375
+      - 73.31312561035156
+  validation:
+    - command: getSelection
+      expected: [59]
+- command: MCDFit
+- command: MCDShow
+  input: 
+    - objects:
+      - 59
+    - true     #hides all but 59
+  validation:
+    - command: GetHiddenObjects
+      expected: {"UtilityTestModel":{"Hidden":[],"Isolated":[59]}}
