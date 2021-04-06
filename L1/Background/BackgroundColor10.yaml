@@ -1,0 +1,31 @@
+# Author: Randy B. Cleary
+# Revised: 3/2/2020
+# L1 test for background setting color
+settings:
+  name: BackgroundColor
+  description: "Sets and gets the background color."
+  classname: L1
+  suite: Background
+  file: BackgroundColor.yaml
+calls:
+#Load the small utility area model
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+#Set background color to blue
+- command: MCDSetBackground
+  input:
+    type: Color
+    red: 0.00
+    green: 0.00
+    blue: 1.00
+    alpha: 1.00
+# Validate that the background color is blue
+  validation:
+    - command: MCDGetBackground
+      expected: {"alpha":1.00,"blue":1.00,"green":0.00,"red":0.00,"type":Color}
+      precision: 2
