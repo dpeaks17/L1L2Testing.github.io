@@ -7,8 +7,6 @@ settings:
   classname: L1
   suite: Clipping
   file: ClipVolumeRange6Plane.yaml
-  exclusions: 
-    - android
 calls:
 #Load the small utility area model
 - command: GVCLoadModel
