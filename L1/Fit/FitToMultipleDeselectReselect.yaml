@@ -4,7 +4,7 @@ settings:
   description: "Fit to Multiple Objects test"
   classname: L1
   suite: FitTests
-  file: FitToMultiple.yaml
+  file: FitToMultipleDeselectReselect.yaml
 calls:
 - command: GVCLoadModel
   input:
