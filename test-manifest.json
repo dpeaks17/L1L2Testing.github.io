@@ -1,1 +1,3 @@
-{"base_url": "https://dpeaks17.github.io/apitests.github.io", "tests": ["/L1/Background/BackgroundColor.yaml"]}
+{"base_url": "https://dpeaks17.github.io/apitests.github.io", "tests": ["/L1/Background/BackgroundColor.yaml","/L1/Background/BackgroundColor2.yaml", "/L1/Background/BackgroundColor3.yaml",
+    "/L1/Background/BackgroundColor4.yaml", "/L1/Background/BackgroundColor5.yaml", "/L1/Background/BackgroundColor6.yaml", "/L1/Background/BackgroundColor7.yaml",
+    "/L1/Background/BackgroundColor8.yaml", "/L1/Background/BackgroundColor9.yaml", "/L1/Background/BackgroundColor10.yaml"]}
