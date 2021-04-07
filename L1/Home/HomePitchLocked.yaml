@@ -5,6 +5,8 @@ settings:
   classname: L1
   suite: HomeTests
   file: HomePitchLocked.yaml
+  exclusions:
+    - android
 calls:
 # Setup section
 - command: GVCLoadModel
