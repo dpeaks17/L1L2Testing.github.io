@@ -7,7 +7,6 @@ settings:
   file: FitToMultiple2D.yaml
   exclusions:
     - web   # Re-enable this during implementation of DI-PB-245262 
-    - android
 calls:
 - command: GVCLoadModel
   input:
