@@ -7,6 +7,8 @@ settings:
   classname: L1
   suite: Clipping
   file: HideMultipleClippingPlanes.yaml
+  exclusions:
+    - android
 calls:
   - command: GVCLoadModel
     input:
