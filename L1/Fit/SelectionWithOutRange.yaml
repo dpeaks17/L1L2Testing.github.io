@@ -5,6 +5,8 @@ settings:
   classname: L1
   suite: SelectionTests
   file: SelectionWithoutRange.yaml
+  exclusions:
+    - android
 calls:
 # Setup section
 - command: GVCLoadModel
