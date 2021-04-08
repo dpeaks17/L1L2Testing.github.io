@@ -6,7 +6,7 @@ settings:
   suite: FitTests
   file: FitToObject.yaml
   exclusions:
-    - androids
+    - android
 calls:
 - command: GVCLoadModel
   input:
