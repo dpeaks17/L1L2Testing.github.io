@@ -5,8 +5,6 @@ settings:
   classname: L1
   suite: FitTests
   file: FitToModel.yaml
-  exclusions:
-    - android
 calls:
 - command: GVCLoadModel
   input:
