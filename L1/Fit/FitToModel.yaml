@@ -13,6 +13,10 @@ calls:
       - https://argo.hexagonppm.com/graphicsamples/refining/
       - parametrics
       - file
+  validation:
+    - command: GetCameraPosition
+      expected: {CameraPosition : {center : {x : 3035.82,y : 2387.79,z : 77.5},clip-far : 200,clip-near : 45.31,perspective : 56,up : {x : -0.37,y : 0.4,z : 0.84}}}
+      precision: 2
 # Move camera so we can fit after
 - command: MCDMove
   input:
