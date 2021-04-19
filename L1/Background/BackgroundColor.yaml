@@ -7,7 +7,7 @@ settings:
   classname: L1
   suite: Background
   file: BackgroundColor.yaml
-  exclsuions:
+  exclusions:
     - android
 calls:
 #Load the small utility area model
