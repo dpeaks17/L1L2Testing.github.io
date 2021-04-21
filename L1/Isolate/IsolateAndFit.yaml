@@ -49,3 +49,6 @@ calls:
       commandName: isolate
       commandArgs:
         immediate: true
+    validation:
+      - command: GetHiddenObjects
+        expected: { "UtilityTestModel": { "Hidden": [59], "Isolated": [] } }
