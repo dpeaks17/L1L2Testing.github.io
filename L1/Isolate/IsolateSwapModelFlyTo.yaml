@@ -9,6 +9,8 @@ settings:
   classname: L1
   suite: Isolate
   file: IsolateSwapModelFlyTo.yaml
+  exclusions:
+    - android
 calls:
   # Load a model
   - command: GVCLoadModel
