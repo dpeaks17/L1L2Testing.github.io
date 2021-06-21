@@ -51,4 +51,4 @@ calls:
         immediate: true
     validation:
       - command: GetHiddenObjects
-        expected: { "UtilityTestModel": { "Hidden": [59], "Isolated": [] } }
+        expected: { "UtilityTestModel": { "Hidden": [], "Isolated": [] } }
