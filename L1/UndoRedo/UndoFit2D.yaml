@@ -5,8 +5,8 @@ settings:
   classname: Undo
   suite: UndoRedoTests
   file: UndoFit2D.yaml
-  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
-    - web   # To be re-enabled during implementation of Id map changes in gvc-react.
+  exclusions:
+    - web
 calls:
 # Setup section
 - command: GVCLoadModel

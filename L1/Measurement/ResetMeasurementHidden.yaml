@@ -1,0 +1,41 @@
+# ResetMeasurementHidden test
+settings:
+  name: ResetMeasurementHidden
+  description: "ResetMeasurementHidden test"
+  classname: L1
+  suite: MeasurementTests
+  file: ResetMeasurementHidden.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+# Test
+- command: ToggleMeasure
+  input:
+    - true
+  validation:
+    - command: GetMeasurementHiddenActive
+      expected: false
+- command: ToggleMeasurementHidden
+  input:
+    - true
+  validation: 
+    - command: GetMeasurementHiddenActive
+      expected: true
+- command: ToggleMeasure
+  input:
+    - false
+- command: ToggleMeasure
+  input:
+    - true
+  validation:
+    - command: GetMeasurementHiddenActive
+      expected: false # this flag should be set back to false from Measure being stopped
+- command: ToggleMeasure
+  input:
+    - false # as one L1 test should not impact other L1 test with data persisted when running all in a session

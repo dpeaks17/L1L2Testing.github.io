@@ -1,0 +1,54 @@
+settings:
+  name: DefaultEffects
+  description: "Tests that loading a new model resets to default visual settings."
+  classname: L1
+  suite: SettingsTests
+  file: DefaultEffects.yaml
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+
+- command: mcdenableeffects
+  input:
+     - effects:
+        - Outline
+
+- command: MCDSelect
+  input:
+  - 59
+  - false
+  - mcdrange:
+    - 2984.682373046875
+    - 2400.51904296875
+    - 70.21309661865234
+    - 2990.031005859375
+    - 2404.73974609375
+    - 73.31312561035156
+
+- command: MCDFit
+  validation:
+  - command: getrendereffects
+    input:
+      - "Outline"
+    expected: {"color":{"w":1,"x":0,"y":0,"z":0},"enable": true,"threshold": 0.95}
+    precision: 2
+
+- command: GVCLoadModel
+  input:
+    - model:
+        - Refining
+        - https://argo.hexagonppm.com/graphicsamples/refining/
+        - parametrics
+        - file
+- command: ToggleFenceSelectMode
+  validation:
+  - command: getrendereffects
+    input:
+      - "Outline"
+    expected: {"color":{"w":1,"x":0,"y":0,"z":0},"enable": false,"threshold": 0.95}
+    precision: 2

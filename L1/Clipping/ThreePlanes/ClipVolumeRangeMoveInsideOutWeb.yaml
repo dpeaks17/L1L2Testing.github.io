@@ -10,7 +10,6 @@ settings:
   exclusions:
     - desktop
     - web   # To be re-enabled during implementation of TR-PB-245136
-    - android
 calls:
 #Load the small utility area model
 - command: GVCLoadModel

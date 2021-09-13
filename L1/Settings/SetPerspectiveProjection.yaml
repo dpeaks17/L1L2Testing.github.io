@@ -7,6 +7,9 @@ settings:
   classname: L1
   suite: CameraTests
   file: SetPerspectiveProjection.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+   - web       # temporally disabled for DI-PB-247981	
+   - desktop   # temporally disabled for DI-PB-247981	
 calls:
 #Load the small utility area model
 - command: GVCLoadModel

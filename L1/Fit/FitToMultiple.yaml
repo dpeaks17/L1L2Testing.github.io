@@ -1,22 +1,11 @@
 # FitToMultiple test
 settings:
-  name: FitToMultipleView2
+  name: FitToMultiple
   description: "Fit to Multiple Objects test"
   classname: L1
   suite: FitTests
-  file: FitToMultipleView2.yaml
-  exclusions: # until the app supports multi views then no
-    - android
-    - ios
-    - web    
+  file: FitToMultiple.yaml
 calls:
-# Set active view model to view2 
-- command: ViewCount
-  input:
-    - 2
-- command: SetActiveGvcViewModel
-  input:
-    - 1
 - command: GVCLoadModel
   input:
     - model:

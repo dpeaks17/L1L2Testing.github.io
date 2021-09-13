@@ -5,8 +5,6 @@ settings:
   classname: L1
   suite: HomeTests
   file: SetHome.yaml
-  exclusions:
-    - android
 calls:
 # Setup section
 - command: GVCLoadModel

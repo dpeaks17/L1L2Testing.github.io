@@ -5,8 +5,6 @@ settings:
   classname: Redo
   suite: UndoRedoTests
   file: RedoResetHomeFlyToEnabled.yaml
-  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
-    - web   # To be re-enabled while making FlyTo in gvc-react same as in gvc-wpf(CR-PB-245161).
 calls:
 # Setup section
 - command: GVCLoadModel
@@ -16,9 +14,6 @@ calls:
       - https://argo.hexagonppm.com/graphicsamples/refining/
       - parametrics
       - file
-- command: MCDToggleFlyTo
-  input:
-  - true
 - command: MCDGoHome
   validation:
   - command: GetCameraPosition
@@ -27,6 +22,9 @@ calls:
   - command: gethomeposition
     expected: {"CameraHomePosition":{"center":{"x":3035.82,"y":2387.79,"z":77.50},"clip-far":200.00,"clip-near":45.31,"perspective":56.00,"up":{"x":-0.37,"y":0.40,"z":0.84}}}
     precision: 2
+- command: MCDToggleFlyTo
+  input:
+  - true
 - command: MCDSelect
   input:
   - 249

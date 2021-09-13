@@ -5,8 +5,6 @@ settings:
   classname: Undo
   suite: UndoRedoTests
   file: UndoNoSetupFlyToEnabled.yaml
-  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
-    - web   # To be re-enabled while making FlyTo in gvc-react same as in gvc-wpf(CR-PB-245161).
 calls:
 # Setup section
 - command: GVCLoadModel

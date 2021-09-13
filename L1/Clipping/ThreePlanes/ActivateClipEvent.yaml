@@ -9,7 +9,6 @@ settings:
   file: ActivateClipEvent.yaml
   exclusions:
     - desktop
-    - android
 calls:
   - command: GVCLoadModel
     input:

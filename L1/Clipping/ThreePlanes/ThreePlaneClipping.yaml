@@ -9,7 +9,6 @@ settings:
   file: ThreePlaneClipping.yaml
   exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
     - web   # To be re-enabled during implementation of TR-PB-245136.
-    - android
 calls:
   - command: GVCLoadModel
     input:

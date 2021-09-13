@@ -1,0 +1,56 @@
+# Isolate is Disabled when object is selected in CombinedModel
+settings:
+  name: IsolateDisabledCombinedModel
+  description: "Test Isolate is disabled when object is selected in CombinedModel"
+  classname: L1
+  suite: Isolate
+  file: IsolateDisabledCombinedModel.yaml
+  exclusions:
+    - web
+    - android
+    - ios
+calls:
+# Loads the combined model
+- command: GVCLoadModel
+  input:
+    - model:
+      - 305_Matterport_Combined-matterport
+      - https://argo.hexagonppm.com/graphicsamples/matterport/output/
+      - HSPC
+      - file
+    - model:
+      - 305_Matterport_Combined-campus305
+      - https://argo.hexagonppm.com/graphicsamples/campus305/
+      - parametrics
+      - file
+# Validate the combined model was loaded.
+  validation:
+    - command: getModels
+      input: 
+        - filters:
+          - displayName
+          - id
+      expected: {"models":[{"displayName":"305_Matterport_Combined-matterport","id":"305_Matterport_Combined-matterport"},{"displayName":"305_Matterport_Combined-campus305","id":"305_Matterport_Combined-campus305"}]}
+# Validate Isolate is disabled after model load
+    - command: getIsolateEnabledStatus
+      expected: false
+# Select one object
+- command: MCDSelect
+  input:
+    - 13264
+    - false
+    - mcdrange:
+        - 36.061794281005859
+        - -192.99153137207031
+        - 21.031200408935547
+        - 41.244564056396484
+        - -146.07249450683594
+        - 21.640800476074219
+# Validate the selection was successful.
+  validation:
+    - command: getSelection
+      expected: [13264]
+      precision: 2
+# Validate Isolate is disabled after selecting an object.
+    - command: getIsolateEnabledStatus
+      expected: false

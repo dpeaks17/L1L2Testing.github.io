@@ -7,14 +7,12 @@ settings:
   classname: L1
   suite: Clipping
   file: ActivateClip.yaml
-  exclusions:
-    - android
 calls:
   - command: GVCLoadModel
     input:
       - model:
           - Refining
-          - https://argo.hexagonppm.com/graphicsamples/refining/
+          - http://localhost/models/Refining/
           - parametrics
           - file
           - configuration:

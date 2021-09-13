@@ -1,0 +1,37 @@
+# Author: Chun Dong
+# Created: 04/5/2021
+# L1 test for 2D Modelsettings:
+settings:
+  name: openModel3Dthen2DCheckProjection
+  description: "Tests opening 3d model then 2d, verifying projection status."
+  classname: L1
+  suite: Models
+  file: openModel3Dthen2DCheckProjection.yaml
+  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
+    - ios
+    - android
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - UtilityTestModel
+      - https://argo.hexagonppm.com/graphicsamples/utility/
+      - parametrics
+      - file
+- command: MCDGoHome
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+- command: MCDGoHome
+  validation:
+  - command: getcameraprojection
+    expected: true

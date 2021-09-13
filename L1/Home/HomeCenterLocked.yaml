@@ -5,8 +5,6 @@ settings:
   classname: L1
   suite: HomeTests
   file: HomeCenterLocked.yaml
-  exclusions:
-    - android
 calls:
 # Setup section
 - command: GVCLoadModel

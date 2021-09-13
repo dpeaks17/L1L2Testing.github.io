@@ -5,8 +5,6 @@ settings:
   classname: HomeYawLocked
   suite: HomeTests
   file: HomeYawLocked.yaml
-  exclusions:
-    - android
 calls:
 # Setup section
 - command: GVCLoadModel

@@ -5,8 +5,6 @@ settings:
   classname: L1
   suite: HomeTests
   file: GoHome.yaml
-  exclusions:
-    - android
 calls:
 # Setup section
 - command: GVCLoadModel
@@ -17,7 +15,7 @@ calls:
       - parametrics
       - file
 - command: MCDFit
-# Navigate somewhere
+# # Navigate somewhere
 - command: MCDMove
   input:
     - 187

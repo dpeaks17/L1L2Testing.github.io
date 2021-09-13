@@ -1,0 +1,25 @@
+settings:
+  name: NavigatorActive2D
+  description: "Tests out the Navigator being active in a two dimensional model."
+  classname: L1
+  suite: MenuTests
+  file: NavigatorActive2D.yaml
+  exclusions: # keyboard is not usable on mobile
+    - android
+    - ios
+calls:
+- command: GVCLoadModel
+  input:
+    - model:
+      - 2DTestDrawing 
+      - https://argo.hexagonppm.com/graphicsamples/2DSamples/demo.bson
+      - Edges
+      - web-api
+      - configuration:
+          CameraHeading: top
+          CameraProjection: orthographic
+          CameraLocks: [pitch, yaw]
+          BackgroundColor: [1,1,1,1]
+  validation:
+  - command: getnavigatoractive
+    expected: false

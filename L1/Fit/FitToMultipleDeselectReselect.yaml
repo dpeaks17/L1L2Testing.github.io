@@ -4,9 +4,7 @@ settings:
   description: "Fit to Multiple Objects test"
   classname: L1
   suite: FitTests
-  file: FitToMultipleDeselectReselect.yaml
-  exclusions:
-    - android
+  file: FitToMultiple.yaml
 calls:
 - command: GVCLoadModel
   input:

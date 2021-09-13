@@ -5,8 +5,6 @@ settings:
   classname: L1
   suite: UndoRedoTests
   file: RedoFitFlyToEnabled.yaml
-  exclusions: # this is optional, you can have web, ios, android, and desktop as possible options
-    - web   # To be re-enabled while making FlyTo in gvc-react same as in gvc-wpf(CR-PB-245161).
 calls:
 # Setup section
 - command: GVCLoadModel
@@ -16,6 +14,10 @@ calls:
       - https://argo.hexagonppm.com/graphicsamples/utility/
       - parametrics
       - file
+  exclusions:
+    - android
+    - ios
+
 - command: MCDToggleFlyTo
   input:
   - true
